@@ -40,7 +40,7 @@ export default function ContactSection() {
     <div className="space-y-16 pb-16">
       
       {/* Title */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Get in Touch</span>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
           Contact Our Team.
@@ -51,7 +51,7 @@ export default function ContactSection() {
       </section>
 
       {/* Main Split Layout */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 select-none">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
         
         {/* Contact details */}
         <div className="lg:col-span-5 space-y-8">

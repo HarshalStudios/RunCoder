@@ -24,7 +24,7 @@ export default function DownloadSection() {
     <div className="space-y-20 pb-16">
       
       {/* Header and Download badge */}
-      <section className="text-center space-y-6 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-6 max-w-3xl mx-auto pt-10 px-4">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Official Distribution</span>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
           Install RunCoder App.
@@ -39,7 +39,7 @@ export default function DownloadSection() {
             onClick={() => {
               alert("RunCoder is available on the Google Play Store. Search for 'RunCoder' in the Play Store app on your Android device to install the application.");
             }}
-            className="bg-[#090b11] border border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 p-4 rounded-2xl flex items-center space-x-4 max-w-sm w-full select-none cursor-pointer transition-all active:scale-98 text-left shadow-lg"
+            className="bg-[#090b11] border border-slate-800 hover:border-slate-700 hover:bg-slate-900/60 p-4 rounded-2xl flex items-center space-x-4 max-w-sm w-full cursor-pointer transition-all active:scale-98 text-left shadow-lg"
           >
             {/* Custom Google Play Logo Symbol */}
             <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center">
@@ -66,7 +66,7 @@ export default function DownloadSection() {
       </section>
 
       {/* Hardware / Software specs */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 select-none grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         
         <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
           <div className="w-10 h-10 bg-indigo-950/40 rounded-xl border border-indigo-900/30 flex items-center justify-center mx-auto lg:mx-0">
@@ -94,7 +94,7 @@ export default function DownloadSection() {
       </section>
 
       {/* Permissions Transparency section */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 select-none space-y-6">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-tight">
             <ShieldAlert className="w-3.5 h-3.5" />
@@ -117,7 +117,7 @@ export default function DownloadSection() {
       </section>
 
       {/* Version Release notes */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 select-none space-y-6">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6">
         <div className="text-center space-y-1.5">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Changelog Logs</span>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-display">Version History</h2>

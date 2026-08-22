@@ -20,7 +20,7 @@ export default function DeletionSection() {
     <div className="space-y-16 pb-16">
       
       {/* Header */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <div className="inline-flex items-center space-x-1.5 bg-rose-500/10 text-rose-400 border border-rose-500/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-tight uppercase font-mono">
           <Trash2 className="w-3.5 h-3.5" />
           <span>Google Play Compliance Ledger</span>
@@ -34,7 +34,7 @@ export default function DeletionSection() {
       </section>
 
       {/* Main Grid split */}
-      <section className="max-w-4xl mx-auto px-4 select-none grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      <section className="max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         
         <div className="md:col-span-4 space-y-4 text-left">
           <div className="w-10 h-10 bg-rose-950/40 rounded-xl border border-rose-900/30 flex items-center justify-center">
@@ -63,7 +63,7 @@ export default function DeletionSection() {
       </section>
 
       {/* Request Process */}
-      <section className="max-w-3xl mx-auto px-4 select-none text-left space-y-4 bg-[#131520]/40 border border-slate-900 rounded-3xl p-6 sm:p-8">
+      <section className="max-w-3xl mx-auto px-4 text-left space-y-4 bg-[#131520]/40 border border-slate-900 rounded-3xl p-6 sm:p-8">
         <h3 className="text-sm font-extrabold text-rose-400 uppercase tracking-wider font-mono flex items-center space-x-1.5">
           <ShieldAlert className="w-4.5 h-4.5" />
           <span>Request Ticket Deletion</span>

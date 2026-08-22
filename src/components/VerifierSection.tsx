@@ -15,7 +15,7 @@ export default function VerifierSection() {
     <div className="space-y-16 pb-16">
       
       {/* Page Header */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <div className="inline-flex items-center space-x-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-tight uppercase font-mono">
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>CANONICAL ISSUER CERTIFICATE</span>
@@ -29,7 +29,7 @@ export default function VerifierSection() {
       </section>
 
       {/* Main Certificate Content */}
-      <section className="max-w-4xl mx-auto px-4 select-none">
+      <section className="max-w-4xl mx-auto px-4">
         <div className="relative overflow-hidden bg-gradient-to-b from-[#131520] to-[#0e1017] border border-emerald-500/20 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl">
           
           {/* Subtle Ambient Decorative Ring */}

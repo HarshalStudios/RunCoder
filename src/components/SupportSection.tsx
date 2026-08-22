@@ -94,7 +94,7 @@ export default function SupportSection() {
     <div className="space-y-20 pb-16">
       
       {/* Title */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">RunCoder Help Center</span>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
           How Can We Help You?
@@ -105,7 +105,7 @@ export default function SupportSection() {
       </section>
 
       {/* Accordion FAQ Area */}
-      <section className="max-w-3xl mx-auto px-4 select-none">
+      <section className="max-w-3xl mx-auto px-4">
         <div className="bg-[#131520] border border-slate-900 rounded-3xl p-6 sm:p-8 space-y-4">
           <h2 className="text-lg font-bold text-white tracking-tight mb-4 flex items-center space-x-2">
             <HelpCircle className="w-5 h-5 text-blue-400" />
@@ -137,7 +137,7 @@ export default function SupportSection() {
       </section>
 
       {/* Grid of Support Categories */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none space-y-8">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
         <div className="text-center space-y-2">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Contact Helpdesk</span>
           <h2 className="text-2xl font-extrabold text-white tracking-tight font-display">Support Directories</h2>
@@ -178,7 +178,7 @@ export default function SupportSection() {
       </section>
 
       {/* Manual Assist Footer Block */}
-      <section className="max-w-3xl mx-auto px-4 select-none">
+      <section className="max-w-3xl mx-auto px-4">
         <div className="bg-[#131520] border border-slate-900 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
           <div className="space-y-1">
             <h3 className="text-sm font-extrabold text-white">Direct Developer Email</h3>

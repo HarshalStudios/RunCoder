@@ -20,7 +20,7 @@ export default function SecuritySection() {
     <div className="space-y-16 pb-16">
       
       {/* Header and intro */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <div className="inline-flex items-center space-x-1.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-tight uppercase font-mono">
           <ShieldAlert className="w-3.5 h-3.5" />
           <span>VULNERABILITY REPORTING PORTAL</span>
@@ -34,7 +34,7 @@ export default function SecuritySection() {
       </section>
 
       {/* Direct Contact instructions */}
-      <section className="max-w-4xl mx-auto px-4 select-none">
+      <section className="max-w-4xl mx-auto px-4">
         <div className="bg-[#131520] border border-slate-900 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-left">
             <h2 className="text-lg font-bold text-white tracking-tight flex items-center space-x-2">
@@ -56,7 +56,7 @@ export default function SecuritySection() {
       </section>
 
       {/* Rules of Engagement */}
-      <section className="max-w-4xl mx-auto px-4 select-none grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      <section className="max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         
         <div className="md:col-span-4 space-y-4 text-left">
           <div className="w-10 h-10 bg-indigo-950/40 rounded-xl border border-indigo-900/30 flex items-center justify-center">
@@ -85,7 +85,7 @@ export default function SecuritySection() {
       </section>
 
       {/* Safe Harbor declaration */}
-      <section className="max-w-3xl mx-auto px-4 select-none text-left space-y-4 bg-[#131520]/40 border border-slate-900 rounded-3xl p-6 sm:p-8">
+      <section className="max-w-3xl mx-auto px-4 text-left space-y-4 bg-[#131520]/40 border border-slate-900 rounded-3xl p-6 sm:p-8">
         <h3 className="text-sm font-extrabold text-indigo-300 uppercase tracking-wider font-mono flex items-center space-x-1.5">
           <Terminal className="w-4 h-4" />
           <span>Safe Harbor Policy</span>

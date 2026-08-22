@@ -77,7 +77,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
     <div className="space-y-24 pb-16">
       
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-12 md:pt-20 select-none" id="home-hero">
+      <section className="relative overflow-hidden pt-12 md:pt-20" id="home-hero">
         {/* Abstract background ambient glows */}
         <div className="absolute top-1/4 left-1/12 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/12 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
@@ -167,7 +167,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
       </section>
 
       {/* 2. VALUE PROPOSITION SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 select-none" id="home-why">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="home-why">
         <div className="text-center space-y-3 pb-12">
           <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Engineered for Learners</span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
@@ -197,7 +197,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
       </section>
 
       {/* 3. SUPPORTED LANGUAGES BLOCK */}
-      <section className="bg-gradient-to-b from-[#090a0f] to-[#0c0d12] border-y border-slate-900/60 py-20 select-none" id="home-languages">
+      <section className="bg-gradient-to-b from-[#090a0f] to-[#0c0d12] border-y border-slate-900/60 py-20" id="home-languages">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 pb-12">
             <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Comprehensive Support</span>
@@ -215,7 +215,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
                 key={i} 
                 className="bg-[#131520] hover:bg-[#181a27] border border-slate-900/80 p-5 rounded-2xl relative overflow-hidden group transition-all"
               >
-                <div className={`absolute top-0 right-0 p-3 text-[10px] font-mono font-bold text-slate-700 select-none`}>
+                <div className={`absolute top-0 right-0 p-3 text-[10px] font-mono font-bold text-slate-700`}>
                   {lang.extension}
                 </div>
                 <div className="space-y-3">
@@ -241,7 +241,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
       </section>
 
       {/* 4. PRO TIERS PREVIEW */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 select-none" id="home-pro">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="home-pro">
         <div className="bg-[#131520] border border-slate-900 rounded-3xl p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-600/5 rounded-full blur-3xl"></div>
           
@@ -284,7 +284,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
             </div>
 
             {/* Premium Coding Fonts Catalog */}
-            <div className="bg-[#0d0e15] border border-slate-900 rounded-2xl p-6 space-y-4 select-none text-left">
+            <div className="bg-[#0d0e15] border border-slate-900 rounded-2xl p-6 space-y-4 text-left">
               <div className="flex justify-between items-center">
                 <span className="text-[9px] font-bold text-amber-400 uppercase tracking-widest font-mono">PREMIUM CODING FONTS</span>
                 <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest font-mono bg-blue-500/10 px-2 py-0.5 rounded-md">11 included fonts</span>
@@ -330,7 +330,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
       </section>
 
       {/* 5. FAQS SEGMENT */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 select-none" id="home-faq">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6" id="home-faq">
         <div className="text-center space-y-3 pb-12">
           <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Frequently Asked Questions</span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-display">
@@ -355,12 +355,12 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
       </section>
 
       {/* 6. CALL-TO-ACTION BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 select-none" id="home-cta">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="home-cta">
         <div className="bg-gradient-to-r from-blue-950 via-indigo-950 to-purple-950 rounded-3xl p-8 md:p-12 text-center space-y-6 border border-indigo-500/10 shadow-2xl shadow-indigo-950/20">
           <img 
             src="/logo.png" 
             alt="RunCoder" 
-            className="w-16 h-16 rounded-2xl shadow-xl shadow-blue-950/30 mx-auto select-none"
+            className="w-16 h-16 rounded-2xl shadow-xl shadow-blue-950/30 mx-auto"
             referrerPolicy="no-referrer"
           />
           

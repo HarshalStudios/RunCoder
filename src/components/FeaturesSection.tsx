@@ -53,7 +53,7 @@ export default function FeaturesSection() {
     <div className="space-y-20 pb-16">
       
       {/* Header section */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10">
         <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest font-mono">Technical Deep Dive</span>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
           A Fully Equipped Android Code Workspace.
@@ -64,7 +64,7 @@ export default function FeaturesSection() {
       </section>
 
       {/* Core Feature Detailed Cards */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 select-none">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
         {coreFeatures.map((feat, i) => {
           const Icon = feat.icon;
           return (
@@ -91,7 +91,7 @@ export default function FeaturesSection() {
       </section>
 
       {/* Language breakdown specs */}
-      <section className="bg-[#090a0f] border-t border-b border-slate-900/60 py-16 select-none">
+      <section className="bg-[#090a0f] border-t border-b border-slate-900/60 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           <div className="lg:col-span-5 space-y-4 text-center lg:text-left">
@@ -125,7 +125,7 @@ export default function FeaturesSection() {
       </section>
 
       {/* Compilation specs & safety FAQs */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 select-none space-y-8">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
         <div className="text-center space-y-2">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Code Safety & Cloud Framework</span>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-display">Compiler & Workspace Parameters</h2>

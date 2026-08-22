@@ -64,7 +64,7 @@ export default function ProSection() {
     <div className="space-y-20 pb-16">
       
       {/* Title */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 select-none px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto pt-10 px-4">
         <div className="inline-flex items-center space-x-1.5 bg-amber-400/10 text-amber-300 border border-amber-400/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-tight uppercase font-mono">
           <Sparkles className="w-3.5 h-3.5" />
           <span>RUNCODER PRO PASS</span>
@@ -78,7 +78,7 @@ export default function ProSection() {
       </section>
 
       {/* Localized Price Banner Notice */}
-      <section className="max-w-4xl mx-auto px-4 select-none">
+      <section className="max-w-4xl mx-auto px-4">
         <div className="bg-gradient-to-r from-indigo-950/30 to-blue-950/30 border border-indigo-900/40 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 text-left">
           <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
             <RefreshCw className="w-6 h-6 text-indigo-400" />
@@ -93,7 +93,7 @@ export default function ProSection() {
       </section>
 
       {/* Plans Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 select-none">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
         {plans.map((p, idx) => (
           <div 
             key={idx}
@@ -158,7 +158,7 @@ export default function ProSection() {
       </section>
 
       {/* Safe Google Play Info segment */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 select-none">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="bg-[#131520] rounded-2xl border border-slate-900 p-5 flex items-center space-x-3.5 text-left">
           <ShieldCheck className="w-6 h-6 text-indigo-400 shrink-0" />
           <span className="text-xs text-slate-400 leading-normal">
@@ -168,7 +168,7 @@ export default function ProSection() {
       </section>
 
       {/* Comparison table */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 select-none space-y-6">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
         <div className="text-center space-y-1.5">
           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Side-By-Side Comparison</span>
           <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-display">Free vs. RunCoder Pro</h2>
