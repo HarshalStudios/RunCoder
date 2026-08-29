@@ -21,9 +21,13 @@ export default function App() {
   // Handle page transitions with scroll to top
   const handlePageChange = (page: Page) => {
     setActivePage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     // Update window hash for bookmarking / browser back navigation support
-    window.location.hash = page;
+    if (page === 'home') {
+      history.replaceState(null, '', window.location.pathname);
+    } else {
+      window.location.hash = page;
+    }
   };
 
   // Synchronize hash with page state on mount/change
@@ -31,10 +35,12 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '') as Page;
       const validPages: Page[] = ['home', 'features', 'pro', 'download', 'support', 'contact', 'privacy', 'terms', 'verifier', 'security', 'refund', 'deletion'];
-      if (validPages.includes(hash)) {
+      if (validPages.includes(hash) && hash !== 'home') {
         setActivePage(hash);
       } else {
         setActivePage('home');
+        // Ensure we always land at the top hero on home load
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }
     };
 
@@ -54,11 +60,11 @@ export default function App() {
       case 'pro':
         return <ProSection />;
       case 'download':
-        return <DownloadSection />;
+        return <DownloadSection onPageChange={handlePageChange} />;
       case 'support':
         return <SupportSection />;
       case 'contact':
-        return <ContactSection />;
+        return <ContactSection onPageChange={handlePageChange} />;
       case 'privacy':
         return <PrivacySection />;
       case 'terms':

@@ -1,6 +1,6 @@
 {
-  "name": "RunCoder Official Website",
-  "description": "The official website of RunCoder - a modern Android code editor and mobile IDE designed for students, engineering learners, and developers.",
+  "name": "RunCoder — Android Code Workspace",
+  "description": "The official product website of RunCoder V2 — a complete coding workspace for Android with templates, projects, file management, and instant execution.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -1,10 +1,11 @@
-import { ShieldCheck, CheckCircle2, Mail, Download, Award, FileText } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Mail, Download, Award, FileText, ExternalLink } from 'lucide-react';
+import { PLAY_STORE_URL } from '../types';
 
 export default function VerifierSection() {
   const metaItems = [
     { label: 'Official Product Name', value: 'RunCoder', badge: 'Verified Android App' },
     { label: 'Developer & Publisher', value: 'Harshal Studios', desc: 'Official Android Developer Account' },
-    { label: 'Package Identifier', value: 'com.harshalstudios.runcoder', code: true },
+    { label: 'Package Identifier', value: 'com.runcode.app', code: true },
     { label: 'Official Domain', value: 'runcoder.app', desc: 'Canonical Web Endpoint' },
     { label: 'Official Support Email', value: 'runcodersupport@gmail.com', copyable: true },
     { label: 'AdMob Publisher Account ID', value: 'pub-6043930204860539', code: true },
@@ -105,15 +106,16 @@ export default function VerifierSection() {
 
           {/* Actions Block */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4 border-t border-slate-900">
-            <button
-              onClick={() => {
-                alert("Navigating to RunCoder on Google Play Store. Search 'RunCoder' in the store app of your Android device to install directly.");
-              }}
+            <a
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs py-2.5 px-6 rounded-xl flex items-center space-x-1.5 transition-all active:scale-95 cursor-pointer shadow-lg shadow-indigo-950/40 border border-indigo-400/20"
             >
               <Download className="w-4 h-4" />
               <span>Get App on Play Store</span>
-            </button>
+              <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+            </a>
             
             <a 
               href="mailto:runcodersupport@gmail.com"

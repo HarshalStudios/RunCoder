@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Home as HomeIcon, 
-  Code2, 
-  FileCode, 
-  FolderOpen, 
+  Edit3, 
+  Wrench, 
+  List, 
   Settings as SettingsIcon, 
   Play, 
   Sparkles, 
@@ -12,6 +12,7 @@ import {
   Search, 
   X, 
   ChevronRight, 
+  ChevronDown,
   Copy, 
   Check, 
   Terminal, 
@@ -19,312 +20,689 @@ import {
   Share2, 
   RotateCcw, 
   Info,
-  ChevronDown
+  FolderOpen,
+  Eye,
+  Star,
+  FileCode,
+  ArrowLeft,
+  MoreVertical,
+  Save,
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
-import { MobileFile, MobileTemplate } from '../types';
+import { MobileFile, WorkspaceProject, MobileTemplate } from '../types';
+import { RUNCODER_TEMPLATES, RunCoderTemplate } from '../data/templates';
+
+// Pre-packaged Initial Files matching the exact real app screenshots
+const INITIAL_FILES: MobileFile[] = [
+  {
+    name: 'Tic_Tac_Toe_Game.js',
+    language: 'javascript',
+    recentlyOpened: true,
+    timeOpened: '3m ago',
+    size: '4.2 KB',
+    content: `document.body.innerHTML = \`
+<style>
+  body {
+    background: #11111b;
+    color: #cdd6f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+  }
+  .game-container {
+    background: #1e1e2e;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    text-align: center;
+    width: 380px;
+  }
+  h1 { margin-top: 0; color: #89b4fa; }
+
+  .scoreboard {
+    display: flex;
+    justify-content: space-around;
+    background: #313244;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .score-card { display: flex; flex-direction: column; font-weight: bold; }
+  .score-card.x-score { color: #f38ba8; }
+  .score-card.o-score { color: #89b4fa; }
+  .score-val { font-size: 24px; }
+</style>
+<div class="game-container">
+  <h1>Tic Tac Toe</h1>
+  <div class="scoreboard">
+    <div class="score-card x-score"><span>Player X</span><span class="score-val">1</span></div>
+    <div class="score-card"><span>Draws</span><span class="score-val">0</span></div>
+    <div class="score-card o-score"><span>Computer O</span><span class="score-val">0</span></div>
+  </div>
+</div>
+\`;
+console.log("Tic Tac Toe Game Initialized Successfully");`
+  },
+  {
+    name: 'Shopping_Cart_Simulation.js',
+    language: 'javascript',
+    recentlyOpened: true,
+    timeOpened: '3m ago',
+    size: '3.8 KB',
+    content: `// Shopping Cart Simulation Engine
+class ShoppingCart {
+  constructor() {
+    this.items = [];
+    this.discount = 0.10; // 10% student promo
+  }
+
+  addItem(name, price, qty = 1) {
+    this.items.push({ name, price, qty });
+    console.log(\`Added \${qty}x \${name} ($ \${price})\`);
+  }
+
+  calculateTotal() {
+    const subtotal = this.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const discounted = subtotal * (1 - this.discount);
+    const tax = discounted * 0.08;
+    return { subtotal, discount: subtotal * this.discount, total: discounted + tax };
+  }
+}
+
+const cart = new ShoppingCart();
+cart.addItem("Mechanical Keyboard", 89.99);
+cart.addItem("USB-C Hub", 34.50, 2);
+console.log("Checkout Summary:", cart.calculateTotal());`
+  },
+  {
+    name: 'Student_Database_Demo.js',
+    language: 'javascript',
+    recentlyOpened: true,
+    timeOpened: '3m ago',
+    size: '3.1 KB',
+    content: `// Student Database Demo
+const students = [
+  { id: 101, name: "Harshal S.", major: "Computer Science", gpa: 3.92 },
+  { id: 102, name: "Alex R.", major: "Software Engineering", gpa: 3.85 },
+  { id: 103, name: "Priya M.", major: "Data Analytics", gpa: 3.98 }
+];
+
+function getHonorRoll(threshold = 3.90) {
+  return students.filter(s => s.gpa >= threshold);
+}
+
+console.log("Honor Roll Students (GPA >= 3.90):");
+console.table(getHonorRoll());`
+  },
+  {
+    name: 'GitHub_Profile_Finder.js',
+    language: 'javascript',
+    recentlyOpened: true,
+    timeOpened: '3m ago',
+    size: '2.9 KB',
+    content: `async function fetchDevProfile(username) {
+  console.log(\`Fetching GitHub public record for: \${username}...\`);
+  return {
+    user: username,
+    publicRepos: 42,
+    followers: 1280,
+    languages: ["C", "C++", "Java", "Python", "JavaScript"]
+  };
+}
+
+fetchDevProfile("harshal0258").then(p => console.log("Profile Result:", p));`
+  },
+  {
+    name: 'Complete_Responsive_Website_Theme.css',
+    language: 'css',
+    recentlyOpened: true,
+    timeOpened: '2m ago',
+    size: '5.6 KB',
+    content: `:root {
+  --bg-primary: #0c0e18;
+  --bg-card: #151829;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-main);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}`
+  },
+  {
+    name: 'Advanced_Grid_Dashboard.css',
+    language: 'css',
+    recentlyOpened: true,
+    timeOpened: '2m ago',
+    size: '4.7 KB',
+    content: `.dashboard-container {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "sidebar main stats"
+    "footer footer footer";
+  grid-template-columns: 240px 1fr 300px;
+  grid-template-rows: 64px 1fr 48px;
+  min-height: 100vh;
+  gap: 12px;
+  background: #0f111e;
+}`
+  },
+  {
+    name: 'Masonry_Layout.css',
+    language: 'css',
+    recentlyOpened: true,
+    timeOpened: '2m ago',
+    size: '2.4 KB',
+    content: `.masonry-grid {
+  column-count: 3;
+  column-gap: 1rem;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  background: #1a1d2e;
+  border-radius: 12px;
+  overflow: hidden;
+}`
+  },
+  {
+    name: 'Dark_Mode_Theme.css',
+    language: 'css',
+    recentlyOpened: true,
+    timeOpened: '2m ago',
+    size: '1.9 KB',
+    content: `[data-theme="dark"] {
+  --surface-0: #0b0d14;
+  --surface-1: #131520;
+  --surface-2: #1b1e2c;
+  --primary: #6366f1;
+  --on-primary: #ffffff;
+}`
+  },
+  {
+    name: 'Complete_Portfolio_Website.html',
+    language: 'html',
+    recentlyOpened: true,
+    timeOpened: '2m ago',
+    size: '6.4 KB',
+    content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex.dev | Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    nav {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .logo { font-size: 20px; font-weight: 800; color: #2563eb; }
+    .btn-hire { background: #2563eb; color: #fff; padding: 8px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; }
+    .hero { text-align: center; max-width: 640px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 32px; font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
+    p { font-size: 15px; line-height: 1.6; color: #64748b; margin-bottom: 24px; }
+    .btn-primary { background: #2563eb; color: #fff; padding: 12px 24px; border-radius: 8px; font-weight: bold; border: none; width: 100%; max-width: 220px; margin-bottom: 10px; cursor: pointer; }
+    .btn-outline { background: transparent; color: #2563eb; border: 1.5px solid #2563eb; padding: 12px 24px; border-radius: 8px; font-weight: bold; width: 100%; max-width: 220px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Alex.dev</div>
+    <button class="btn-hire">Hire Me</button>
+  </nav>
+  <div class="hero">
+    <h1>Building digital products, brands, and experiences.</h1>
+    <p>A Senior Frontend Engineer specializing in building exceptional digital experiences with a focus on accessible, semantic, and performant user interfaces.</p>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <button class="btn-primary">View My Work</button>
+      <button class="btn-outline">Download Resume</button>
+    </div>
+  </div>
+</body>
+</html>`
+  },
+  {
+    name: 'Swap_Using_Pointers.c',
+    language: 'c',
+    recentlyOpened: true,
+    timeOpened: '4m ago',
+    size: '1.8 KB',
+    content: `#include <stdio.h>
+
+void swap(int *xp, int *yp) {
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+int main() {
+    int a = 15, b = 42;
+    printf("--- C Pointer Memory Swapper ---\\n");
+    printf("Initial: a = %d (addr: %p), b = %d (addr: %p)\\n", a, (void*)&a, b, (void*)&b);
+    
+    swap(&a, &b);
+    
+    printf("Swapped: a = %d, b = %d\\n", a, b);
+    printf("Process memory verified.\\n");
+    return 0;
+}`
+  },
+  {
+    name: 'Function_with_Return_Value.c',
+    language: 'c',
+    recentlyOpened: true,
+    timeOpened: '4m ago',
+    size: '1.5 KB',
+    content: `#include <stdio.h>
+
+int square(int num) {
+    return num * num;
+}
+
+int main() {
+    int val = 9;
+    printf("The square of %d is %d\\n", val, square(val));
+    return 0;
+}`
+  },
+  {
+    name: 'Recursive_Factorial.c',
+    language: 'c',
+    recentlyOpened: true,
+    timeOpened: '4m ago',
+    size: '1.6 KB',
+    content: `#include <stdio.h>
+
+long long factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+int main() {
+    int num = 6;
+    printf("Factorial of %d = %lld\\n", num, factorial(num));
+    return 0;
+}`
+  },
+  {
+    name: 'File_Write_and_Read.c',
+    language: 'c',
+    recentlyOpened: true,
+    timeOpened: '4m ago',
+    size: '2.1 KB',
+    content: `#include <stdio.h>
+
+int main() {
+    FILE *fp = fopen("output.txt", "w");
+    if (!fp) {
+        printf("Error opening file!\\n");
+        return 1;
+    }
+    fprintf(fp, "RunCoder Mobile Sandbox\\n");
+    fclose(fp);
+    printf("File created and written successfully.\\n");
+    return 0;
+}`
+  },
+  {
+    name: 'Employee_Management_System.cpp',
+    language: 'cpp',
+    recentlyOpened: true,
+    timeOpened: 'Just now',
+    size: '4.9 KB',
+    content: `#include <iostream>
+#include <vector>
+#include <string>
+
+class Employee {
+public:
+    int id;
+    std::string name;
+    std::string role;
+    double salary;
+
+    Employee(int i, std::string n, std::string r, double s)
+        : id(i), name(n), role(r), salary(s) {}
+
+    void display() const {
+        std::cout << "[" << id << "] " << name << " | " << role 
+                  << " | $" << salary << std::endl;
+    }
+};
+
+int main() {
+    std::vector<Employee> team;
+    team.emplace_back(101, "Harshal S.", "Lead Engineer", 125000.0);
+    team.emplace_back(102, "Alex R.", "Frontend Specialist", 105000.0);
+    team.emplace_back(103, "Priya M.", "Systems Architect", 135000.0);
+
+    std::cout << "--- Team Directory ---" << std::endl;
+    for (const auto& emp : team) {
+        emp.display();
+    }
+    return 0;
+}`
+  },
+  {
+    name: 'Binary_Search.java',
+    language: 'java',
+    recentlyOpened: true,
+    timeOpened: 'Just now',
+    size: '3.4 KB',
+    content: `import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class BinarySearch {
+    public static void main(String[] args) {
+        List<Integer> numbers = new ArrayList<>();
+        numbers.add(12);
+        numbers.add(24);
+        numbers.add(47);
+        numbers.add(68);
+        numbers.add(95);
+
+        int key = 47;
+        int index = Collections.binarySearch(numbers, key);
+
+        System.out.println("Sorted List: " + numbers);
+        System.out.println("Key " + key + " found at index: " + index);
+    }
+}`
+  },
+  {
+    name: 'Polymorphism.py',
+    language: 'python',
+    recentlyOpened: true,
+    timeOpened: 'Just now',
+    size: '2.5 KB',
+    content: `class Shape:
+    def area(self):
+        pass
+
+class Rectangle(Shape):
+    def __init__(self, w, h):
+        self.w = w
+        self.h = h
+    def area(self):
+        return self.w * self.h
+
+class Circle(Shape):
+    def __init__(self, r):
+        self.r = r
+    def area(self):
+        return 3.14159 * self.r * self.r
+
+shapes = [Rectangle(10, 5), Circle(7)]
+for s in shapes:
+    print(f"Shape: {s.__class__.__name__}, Area: {s.area():.2f}")`
+  }
+];
 
 export default function DeviceMockup() {
-  // Navigation states inside the simulated app
+  // Navigation tabs (5 tabs matching screenshots 1-5):
+  // 'home' | 'code' | 'templates' | 'files' | 'settings'
   const [activeTab, setActiveTab] = useState<'home' | 'code' | 'templates' | 'files' | 'settings'>('home');
-  const [activeView, setActiveView] = useState<'tabs' | 'editor' | 'preview'>('tabs');
   
-  // Editor and preview states
-  const [currentFile, setCurrentFile] = useState<MobileFile | null>(null);
-  const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
+  // Views:
+  // 'tabs' -> 5 navigation tabs
+  // 'editor' -> Full-screen Code Editor (Screenshot 6)
+  // 'preview' -> Interactive Preview / Console (Screenshots 7 & 8)
+  const [activeView, setActiveView] = useState<'tabs' | 'editor' | 'preview'>('tabs');
+
+  // Files state
+  const [allFiles, setAllFiles] = useState<MobileFile[]>(INITIAL_FILES);
+  const [currentFile, setCurrentFile] = useState<MobileFile>(INITIAL_FILES[0]);
+  const [openTabs, setOpenTabs] = useState<MobileFile[]>([
+    INITIAL_FILES[0], // Tic_Tac_Toe_Game.js
+    INITIAL_FILES[1], // Shopping_Cart_Simulation.js
+  ]);
+
+  // Terminal & Compilation Logs
+  const [consoleLogs, setConsoleLogs] = useState<string[]>([
+    '✔ RunCode Mobile Sandbox Online',
+    '⚡ Memory: 512MB isolated container',
+    '💡 Tap "▶ Run" or "🌐 Preview" to execute.'
+  ]);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isCompiling, setIsCompiling] = useState(false);
-  const [showTerminal, setShowTerminal] = useState(true);
+
+  // Preview Mode: 'preview' (WebView) | 'console' (JavaScript Output)
   const [previewTab, setPreviewTab] = useState<'preview' | 'console'>('preview');
 
-  // Tic Tac Toe State for the interactive preview simulator
-  const [tttBoard, setTttBoard] = useState<(string | null)[]>(Array(9).fill(null));
-  const [tttIsXNext, setTttIsXNext] = useState(true);
-  const [tttWinner, setTttWinner] = useState<string | null>(null);
+  // Interactive Tic-Tac-Toe Game State (Screenshot 7)
+  const [tttBoard, setTttBoard] = useState<(string | null)[]>(['X', null, 'X', 'O', 'X', null, 'X', null, 'O']);
+  const [tttDifficulty, setTttDifficulty] = useState('Easy');
   const [tttScores, setTttScores] = useState({ x: 1, o: 0, draws: 0 });
+  const [tttWinner, setTttWinner] = useState<string | null>('X');
   const [tttAgainstAI, setTttAgainstAI] = useState(true);
 
-  // Settings states (that dynamically affect the simulated editor)
+  // Settings State (Screenshot 5)
   const [fontSize, setFontSize] = useState<number>(14);
   const [syntaxHighlighting, setSyntaxHighlighting] = useState<boolean>(true);
   const [wordWrap, setWordWrap] = useState<boolean>(true);
   const [lineNumbers, setLineNumbers] = useState<boolean>(true);
   const [autoSave, setAutoSave] = useState<boolean>(true);
-  const [selectedFont, setSelectedFont] = useState<'Default' | 'Fira Code' | 'JetBrains Mono'>('JetBrains Mono');
+  const [selectedFont, setSelectedFont] = useState<string>('Default');
 
-  // Search states for templates and files
+  // Search & Filter States
   const [templateSearch, setTemplateSearch] = useState('');
-  const [templateLangFilter, setTemplateLangFilter] = useState<string>('All');
-  const [templateLevelFilter, setTemplateLevelFilter] = useState<string>('All');
-  const [fileSearch, setFileSearch] = useState('');
-  const [fileLangFilter, setFileLangFilter] = useState<string>('All');
+  const [templateLangFilter, setTemplateLangFilter] = useState('All');
+  const [templateLevelFilter, setTemplateLevelFilter] = useState('All');
+  const [expandedTemplateId, setExpandedTemplateId] = useState<string | null>(null);
 
-  // Copied states
-  const [copiedTemplate, setCopiedTemplate] = useState<string | null>(null);
+  const [filesSearch, setFilesSearch] = useState('');
+  const [filesLangFilter, setFilesLangFilter] = useState('All');
 
-  // Default Files inside RunCoder
-  const [filesList, setFilesList] = useState<MobileFile[]>([
-    { 
-      name: 'Tic_Tac_Toe_Game.js', 
-      language: 'javascript', 
-      recentlyOpened: true, 
-      timeOpened: 'Just now',
-      content: `// Tic Tac Toe game simulator\nfunction checkWinner(board) {\n  const lines = [\n    [0, 1, 2], [3, 4, 5], [6, 7, 8],\n    [0, 3, 6], [1, 4, 7], [2, 5, 8],\n    [0, 4, 8], [2, 4, 6]\n  ];\n  for (let line of lines) {\n    const [a, b, c] = line;\n    if (board[a] && board[a] === board[b] && board[a] === board[c]) {\n      return board[a];\n    }\n  }\n  return null;\n}`
-    },
-    { 
-      name: 'Binary_Search.java', 
-      language: 'java', 
-      recentlyOpened: true, 
-      timeOpened: '2m ago',
-      content: `import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int[] arr = {10, 20, 30, 40, 50};\n        System.out.print("Enter search element: ");\n        int search = 40;\n        System.out.println(search);\n        \n        int left = 0, right = arr.length - 1;\n        boolean found = false;\n        while (left <= right) {\n            int mid = left + (right - left) / 2;\n            if (arr[mid] == search) {\n                System.out.println("Element found at index " + mid);\n                found = true;\n                break;\n            } else if (arr[mid] < search) left = mid + 1;\n            else right = mid - 1;\n        }\n        if (!found) System.out.println("Element not found");\n    }\n}`
-    },
-    { 
-      name: 'Shopping_Cart_Simulation.js', 
-      language: 'javascript', 
-      recentlyOpened: true, 
-      timeOpened: '3m ago',
-      content: `const cart = [\n  { name: 'Android Book', price: 29.99, qty: 2 },\n  { name: 'USB-C Cable', price: 9.99, qty: 1 }\n];\nconst total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);\nconsole.log(\`Total Bill: $\${total.toFixed(2)}\`);`
-    },
-    { 
-      name: 'Student_Database_Demo.js', 
-      language: 'javascript', 
-      recentlyOpened: true, 
-      timeOpened: '3m ago',
-      content: `const students = [\n  { id: 101, name: 'Alex Johnson', gpa: 3.8 },\n  { id: 102, name: 'Samantha Smith', gpa: 3.9 }\n];\nstudents.forEach(s => console.log(\`Student ID: \${s.id}, Name: \${s.name}, GPA: \${s.gpa}\`));`
-    },
-    { 
-      name: 'Swap_Using_Pointers.c', 
-      language: 'c', 
-      recentlyOpened: true, 
-      timeOpened: '4m ago',
-      content: `#include <stdio.h>\n\nvoid swap(int *xp, int *yp) {\n    int temp = *xp;\n    *xp = *yp;\n    *yp = temp;\n}\n\nint main() {\n    int a = 10, b = 25;\n    printf("Before swap: a = %d, b = %d\\n", a, b);\n    swap(&a, &b);\n    printf("After swap: a = %d, b = %d\\n", a, b);\n    return 0;\n}`
-    },
-    {
-      name: 'Polymorphism.py',
-      language: 'python',
-      recentlyOpened: true,
-      timeOpened: 'Just now',
-      content: `class Animal:\n    def speak(self):\n        pass\n\nclass Dog(Animal):\n    def speak(self):\n        return "Woof!"\n\nclass Cat(Animal):\n    def speak(self):\n        return "Meow!"\n\nanimals = [Dog(), Cat()]\nfor animal in animals:\n    print(animal.__class__.__name__ + ": " + animal.speak())`
-    },
-    {
-      name: 'index.html',
-      language: 'html',
-      recentlyOpened: true,
-      timeOpened: '10m ago',
-      content: `<!DOCTYPE html>\n<html>\n<head>\n  <title>RunCoder App</title>\n  <style>\n    body { background: #0f172a; color: white; font-family: sans-serif; }\n  </style>\n</head>\n<body>\n  <h1>Welcome from Android!</h1>\n  <p>RunCoder makes coding easy and simple.</p>\n</body>\n</html>`
-    }
-  ]);
+  // Notification Toast
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Coding templates mock database
-  const templates: MobileTemplate[] = [
-    {
-      title: 'Employee Management System',
-      language: 'cpp',
-      description: 'Vector of employee objects with filtering capabilities.',
-      level: 'Advanced',
-      code: `#include <iostream>\n#include <vector>\n#include <string>\n\nclass Employee {\npublic:\n    std::string name;\n    double salary;\n    Employee(std::string n, double s) : name(n), salary(s) {}\n};\n\nint main() {\n    std::vector<Employee> list = {\n        Employee("Alice", 75000),\n        Employee("Bob", 62000)\n    };\n    for (const auto& emp : list) {\n        std::cout << emp.name << " earns $" << emp.salary << "\\n";\n    }\n    return 0;\n}`,
-      output: "Alice earns $75000\nBob earns $62000"
-    },
-    {
-      title: 'Binary Search Algorithm',
-      language: 'java',
-      description: 'Highly optimized logarithmic element matching algorithm.',
-      level: 'Intermediate',
-      code: `public class BinarySearch {\n    public static int search(int[] arr, int target) {\n        int l = 0, r = arr.length - 1;\n        while (l <= r) {\n            int m = l + (r - l) / 2;\n            if (arr[m] == target) return m;\n            if (arr[m] < target) l = m + 1;\n            else r = m - 1;\n        }\n        return -1;\n    }\n}`,
-      output: "Array index matched successfully."
-    },
-    {
-      title: 'Polymorphism Demonstration',
-      language: 'python',
-      description: 'Abstract bases and dynamic class overrides in Python.',
-      level: 'Beginner',
-      code: `class Animal:\n    def speak(self): pass\n\nclass Dog(Animal):\n    def speak(self): return "Woof!"\n\nprint(Dog().speak())`,
-      output: "Woof!"
-    },
-    {
-      title: 'Database Quick Connection',
-      language: 'java',
-      description: 'JDBC helper configuration structure for learners.',
-      level: 'Advanced',
-      code: `// JDBC setup block\nimport java.sql.Connection;\nimport java.sql.DriverManager;\n\npublic class DB {\n    public static void connect() throws Exception {\n        String url = "jdbc:sqlite:runcoder.db";\n        Connection conn = DriverManager.getConnection(url);\n        System.out.println("Connection established.");\n    }\n}`,
-      output: "Connection established."
-    },
-    {
-      title: 'Tic Tac Toe Grid Renderer',
-      language: 'javascript',
-      description: 'Quick arrays initialization & validation mapping.',
-      level: 'Intermediate',
-      code: `const board = Array(9).fill(null);\nboard[4] = 'X'; // Center piece\nconsole.log("Middle move placed: " + board[4]);`,
-      output: "Middle move placed: X"
-    },
-    {
-      title: 'Simple Responsive Canvas',
-      language: 'html',
-      description: 'Centering structural coordinates natively.',
-      level: 'Beginner',
-      code: `<!DOCTYPE html>\n<html>\n<body>\n  <canvas id="stage" width="300" height="300"></canvas>\n</body>\n</html>`,
-      output: "Canvas rendered."
-    }
-  ];
+  // Clock
+  const [phoneTime, setPhoneTime] = useState('17:02');
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setPhoneTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
+    };
+    update();
+    const timer = setInterval(update, 30000);
+    return () => clearInterval(timer);
+  }, []);
 
-  // Helper: Open a file in the editor
-  const handleOpenFile = (file: MobileFile) => {
-    setCurrentFile(file);
-    setActiveView('editor');
-    // Set default initial console output
-    setConsoleLogs([
-      `✔ Connected to RunCoder Cloud Environment`,
-      `☕ Selected SDK/Runtime: ${file.language.toUpperCase()}`,
-      `💡 Press the "▶ Run" button to execute this program.`
-    ]);
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 2000);
   };
 
-  // Helper: Compile/Run code simulation
-  const handleRunCode = () => {
+  // Helper: Open File in Code Editor
+  const openFileInEditor = (file: MobileFile) => {
+    setCurrentFile(file);
+    if (!openTabs.some(t => t.name === file.name)) {
+      setOpenTabs(prev => [...prev, file]);
+    }
+    setActiveView('editor');
+    showToast(`Opened ${file.name}`);
+  };
+
+  // Helper: Close a file tab
+  const closeTab = (fileName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const remaining = openTabs.filter(t => t.name !== fileName);
+    if (remaining.length === 0) {
+      setActiveView('tabs');
+      setActiveTab('code');
+    } else {
+      setOpenTabs(remaining);
+      if (currentFile.name === fileName) {
+        setCurrentFile(remaining[remaining.length - 1]);
+      }
+    }
+  };
+
+  // Helper: Run / Preview Code
+  const handleExecute = () => {
     if (!currentFile) return;
-    setIsCompiling(true);
-    setConsoleLogs(prev => [...prev, `⏳ Compiling & packing codebase...`, `📡 Requesting secure execution cloud sandbox...`]);
+    const isWeb = currentFile.language === 'javascript' || currentFile.language === 'html' || currentFile.language === 'css';
     
+    if (isWeb) {
+      setActiveView('preview');
+      return;
+    }
+
+    setIsCompiling(true);
+    setIsTerminalOpen(true);
+    setConsoleLogs(prev => [
+      ...prev,
+      `─────────────────────────────────────`,
+      `⏳ Compiling '${currentFile.name}' with ${currentFile.language.toUpperCase()}...`
+    ]);
+
     setTimeout(() => {
       setIsCompiling(false);
-      let runOutput = '';
-      
-      // Determine simulated output based on file language and code contents
-      if (currentFile.name === 'Tic_Tac_Toe_Game.js') {
-        runOutput = `✅ Program Executed Successfully\n\n[Launch Simulator]\nInitializing Tic Tac Toe visual canvas...\nLoading dynamic assets...\nDevice Frame matches: PORT 3000\nClick "Preview App" in the top bar to play the game!`;
-        // Automatically suggest preview button
-        setConsoleLogs(prev => [
-          ...prev, 
-          `🚀 Running environment server on internal port 3000`,
-          `✔ Done in 450ms.`,
-          `🎉 Visual preview available! Click the 'Preview' tab.`
-        ]);
-        setActiveView('preview');
-        return;
+      let output = '';
+      if (currentFile.language === 'c') {
+        output = `--- C Pointer Memory Swapper ---\nInitial: a = 15 (addr: 0x7ffd1), b = 42 (addr: 0x7ffd5)\nSwapped: a = 42, b = 15\nProcess memory verified.`;
+      } else if (currentFile.language === 'cpp') {
+        output = `--- Team Directory ---\n[101] Harshal S. | Lead Engineer | $125000.0\n[102] Alex R. | Frontend Specialist | $105000.0\n[103] Priya M. | Systems Architect | $135000.0`;
       } else if (currentFile.language === 'java') {
-        runOutput = `✔ Program Executed Successfully\n\nEnter number of elements: 5\nEnter 5 sorted elements: 10 20 30 40 50\nEnter search element: 40\n\nElement found at index 3.`;
-      } else if (currentFile.language === 'c') {
-        runOutput = `✔ Program Executed Successfully\n\nBefore swap: a = 10, b = 25\nAfter swap: a = 25, b = 10`;
+        output = `Sorted List: [12, 24, 47, 68, 95]\nKey 47 found at index: 2`;
       } else if (currentFile.language === 'python') {
-        runOutput = `✔ Program Executed Successfully\n\nDog: Woof!\nCat: Meow!`;
-      } else if (currentFile.language === 'html') {
-        runOutput = `✅ Web preview compiled.\n\nViewport: Mobile Device\nStyles: Default CSS Applied.\nClick the "Preview" button in top toolbar.`;
-        setActiveView('preview');
-        return;
-      } else {
-        runOutput = `✔ Program Executed Successfully\n\nTotal Bill: $69.97\nDone.`;
+        output = `Shape: Rectangle, Area: 50.00\nShape: Circle, Area: 153.94`;
       }
-
       setConsoleLogs(prev => [
-        ...prev, 
-        `🚀 Executing binary inside cloud terminal...`,
-        `\n${runOutput}`
+        ...prev,
+        output,
+        `\n[Process exited with code 0 in 184ms]`
       ]);
-    }, 1200);
+    }, 600);
   };
 
-  // Tic-Tac-Toe Simulated Logic
-  const handleTttClick = (index: number) => {
-    if (tttBoard[index] || tttWinner) return;
-    
+  // Tic Tac Toe Gameplay
+  const handleTttClick = (idx: number) => {
+    if (tttBoard[idx] || tttWinner) return;
     const newBoard = [...tttBoard];
-    newBoard[index] = 'X';
+    newBoard[idx] = 'X';
     setTttBoard(newBoard);
-    
-    const winner = checkTttWinner(newBoard);
+
+    const winner = checkWinner(newBoard);
     if (winner) {
       setTttWinner(winner);
       if (winner === 'X') setTttScores(s => ({ ...s, x: s.x + 1 }));
       else if (winner === 'O') setTttScores(s => ({ ...s, o: s.o + 1 }));
       return;
     }
-    
-    if (newBoard.every(cell => cell !== null)) {
+
+    if (newBoard.every(c => c !== null)) {
       setTttWinner('Draw');
       setTttScores(s => ({ ...s, draws: s.draws + 1 }));
       return;
     }
 
-    setTttIsXNext(false);
-
-    // AI Move
     if (tttAgainstAI) {
       setTimeout(() => {
         const aiBoard = [...newBoard];
-        // simple minimax/random choice: find empty slots
         const emptyIndices = aiBoard.map((c, i) => c === null ? i : null).filter(c => c !== null) as number[];
         if (emptyIndices.length > 0) {
-          // simple AI rule: prefer center (4) if empty, else random
-          const chosenIndex = emptyIndices.includes(4) ? 4 : emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-          aiBoard[chosenIndex] = 'O';
+          const chosen = emptyIndices.includes(4) ? 4 : emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+          aiBoard[chosen] = 'O';
           setTttBoard(aiBoard);
-          
-          const aiWinner = checkTttWinner(aiBoard);
+          const aiWinner = checkWinner(aiBoard);
           if (aiWinner) {
             setTttWinner(aiWinner);
             if (aiWinner === 'O') setTttScores(s => ({ ...s, o: s.o + 1 }));
-          } else if (aiBoard.every(cell => cell !== null)) {
+          } else if (aiBoard.every(c => c !== null)) {
             setTttWinner('Draw');
             setTttScores(s => ({ ...s, draws: s.draws + 1 }));
           }
         }
-        setTttIsXNext(true);
-      }, 500);
+      }, 350);
     }
   };
 
-  const checkTttWinner = (board: (string | null)[]) => {
+  const checkWinner = (b: (string | null)[]) => {
     const lines = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8],
       [0, 3, 6], [1, 4, 7], [2, 5, 8],
       [0, 4, 8], [2, 4, 6]
     ];
-    for (let line of lines) {
-      const [a, b, c] = line;
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a];
-      }
+    for (let [x, y, z] of lines) {
+      if (b[x] && b[x] === b[y] && b[x] === b[z]) return b[x];
     }
     return null;
   };
 
-  const resetTtt = () => {
+  const resetTttGame = () => {
     setTttBoard(Array(9).fill(null));
-    setTttIsXNext(true);
     setTttWinner(null);
   };
 
-  // Filter lists
-  const filteredTemplates = templates.filter(t => {
-    const matchSearch = t.title.toLowerCase().includes(templateSearch.toLowerCase()) || 
-                        t.description.toLowerCase().includes(templateSearch.toLowerCase());
-    const matchLang = templateLangFilter === 'All' || t.language.toLowerCase() === templateLangFilter.toLowerCase();
-    const matchLevel = templateLevelFilter === 'All' || t.level.toLowerCase() === templateLevelFilter.toLowerCase();
+  // Filter templates
+  const filteredTemplates = RUNCODER_TEMPLATES.filter(t => {
+    const matchSearch = !templateSearch || 
+      t.title.toLowerCase().includes(templateSearch.toLowerCase()) || 
+      t.description.toLowerCase().includes(templateSearch.toLowerCase());
+    
+    const matchLang = templateLangFilter === 'All' || 
+      (templateLangFilter === 'C' && t.language === 'c') ||
+      (templateLangFilter === 'C++' && t.language === 'cpp') ||
+      (templateLangFilter === 'Java' && t.language === 'java') ||
+      (templateLangFilter === 'Python' && t.language === 'python') ||
+      (templateLangFilter === 'HTML' && t.language === 'html') ||
+      (templateLangFilter === 'CSS' && t.language === 'css');
+
+    const matchLevel = templateLevelFilter === 'All' || t.level === templateLevelFilter;
     return matchSearch && matchLang && matchLevel;
   });
 
-  const filteredFiles = filesList.filter(f => {
-    const matchSearch = f.name.toLowerCase().includes(fileSearch.toLowerCase());
-    const matchLang = fileLangFilter === 'All' || f.language.toLowerCase() === fileLangFilter.toLowerCase();
+  // Filter files
+  const filteredFiles = allFiles.filter(f => {
+    const matchSearch = !filesSearch || f.name.toLowerCase().includes(filesSearch.toLowerCase());
+    const matchLang = filesLangFilter === 'All' || 
+      (filesLangFilter === 'C' && f.language === 'c') ||
+      (filesLangFilter === 'C++' && f.language === 'cpp') ||
+      (filesLangFilter === 'CSS' && f.language === 'css') ||
+      (filesLangFilter === 'HTML' && f.language === 'html') ||
+      (filesLangFilter === 'Java' && f.language === 'java');
     return matchSearch && matchLang;
   });
 
-  // Time ticker in Status Bar
-  const [phoneTime, setPhoneTime] = useState('13:14');
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      let hours = now.getHours();
-      let minutes = now.getMinutes().toString().padStart(2, '0');
-      setPhoneTime(`${hours}:${minutes}`);
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="relative mx-auto max-w-[340px] md:max-w-[360px] w-full" id="interactive-device">
-      {/* Device frame container */}
-      <div className="relative border-[10px] border-[#1e2235] bg-[#0c0d12] rounded-[48px] shadow-2xl shadow-blue-900/20 overflow-hidden ring-4 ring-[#292e47] select-none h-[640px] flex flex-col">
+      {/* Device Chassis with precise Android bezel and shadow */}
+      <div className="relative border-[10px] border-[#1e2235] bg-[#0c0e18] rounded-[48px] shadow-2xl shadow-blue-950/40 overflow-hidden ring-4 ring-[#292e47] select-none h-[640px] flex flex-col font-sans">
         
         {/* Punch-hole Camera */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#111111] rounded-full z-50 flex items-center justify-center">
@@ -332,284 +710,302 @@ export default function DeviceMockup() {
         </div>
 
         {/* Status Bar */}
-        <div className="bg-[#0c0d12] text-slate-400 text-[11px] px-6 pt-3 pb-1 flex justify-between items-center z-40 shrink-0 font-sans">
+        <div className="bg-[#0c0e18] text-slate-400 text-[11px] px-6 pt-3 pb-1 flex justify-between items-center z-40 shrink-0">
           <span className="font-medium tracking-tight text-white">{phoneTime}</span>
           <div className="flex items-center space-x-1.5">
-            {/* Cell Signal */}
             <svg className="w-3.5 h-3.5 text-white fill-current" viewBox="0 0 24 24">
               <path d="M2 22h20V2z" />
             </svg>
-            {/* Wifi Icon */}
             <svg className="w-3.5 h-3.5 text-white fill-current" viewBox="0 0 24 24">
               <path d="M12 21l-12-18h24z" />
             </svg>
-            {/* Battery */}
             <div className="w-5 h-2.5 border border-white/60 rounded-sm p-0.5 flex items-center">
               <div className="h-full w-4 bg-emerald-400 rounded-2xs"></div>
             </div>
           </div>
         </div>
 
-        {/* Core Screen Area */}
-        <div className="flex-1 overflow-hidden relative flex flex-col bg-[#0d0e15] text-[#f8fafc]">
+        {/* Toast feedback */}
+        <AnimatePresence>
+          {toastMsg && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-12 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white text-[10px] font-bold py-1 px-3.5 rounded-full shadow-xl flex items-center space-x-1.5"
+            >
+              <CheckCircle2 className="w-3 h-3 text-emerald-300" />
+              <span>{toastMsg}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Core Screen Canvas */}
+        <div className="flex-1 overflow-hidden relative flex flex-col bg-[#0c0e18] text-[#f8fafc]">
           
           <AnimatePresence mode="wait">
-            {/* MAIN APP TABS VIEW */}
+            
+            {/* ========================================================= */}
+            {/* VIEW 1: 5 BOTTOM NAVIGATION TABS                           */}
+            {/* ========================================================= */}
             {activeView === 'tabs' && (
               <motion.div 
                 key={activeTab}
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -15 }}
-                transition={{ duration: 0.15 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.12 }}
                 className="flex-1 flex flex-col h-full overflow-y-auto pb-16 scrollbar-none"
               >
                 
-                {/* 1. HOME TAB */}
+                {/* ------------------------------------------------------- */}
+                {/* TAB 1: HOME SCREEN (Screenshot 1)                       */}
+                {/* ------------------------------------------------------- */}
                 {activeTab === 'home' && (
                   <div className="p-4 space-y-4">
-                    {/* Header */}
-                    <div className="flex justify-between items-center pt-1">
-                      <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">RunCoder</span>
+                    {/* Top App Header with "RunCode" and "★ Go Pro" pill */}
+                    <div className="flex justify-between items-center pt-0.5">
+                      <span className="text-xl font-bold text-white tracking-tight">RunCode</span>
                       <button 
                         onClick={() => setActiveTab('settings')}
-                        className="flex items-center space-x-1 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-[10px] font-bold py-1.5 px-3 rounded-full shadow-lg shadow-indigo-900/30 border border-indigo-400/20 active:scale-95 transition-all"
+                        className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md active:scale-95 transition-all cursor-pointer"
                       >
-                        <Sparkles className="w-3 h-3 text-amber-300" />
+                        <span>★</span>
                         <span>Go Pro</span>
                       </button>
                     </div>
 
-                    {/* Greeting card */}
-                    <div className="text-center py-2">
-                      <span className="text-xs text-slate-400">Welcome 👋</span>
-                      <h2 className="text-xl font-extrabold text-white tracking-tight mt-0.5">Learn. Code. Execute.</h2>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Built for Students & Engineers</p>
+                    {/* Headline banner */}
+                    <div className="text-center pt-1 space-y-0.5">
+                      <div className="text-xs text-slate-300 font-medium">Welcome 👋</div>
+                      <h1 className="text-xl font-extrabold text-white tracking-tight">Learn. Code. Execute.</h1>
+                      <p className="text-[11px] text-slate-400">Built for Students & Engineers</p>
                     </div>
 
-                    {/* Create New Project banner */}
+                    {/* Big Hero Action Card: "Create New Project" */}
                     <div 
-                      onClick={() => {
-                        const defaultCFile = filesList.find(f => f.name === 'Swap_Using_Pointers.c');
-                        if (defaultCFile) handleOpenFile(defaultCFile);
-                      }}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-2xl relative overflow-hidden shadow-lg shadow-indigo-950/40 border border-indigo-400/20 cursor-pointer hover:brightness-110 active:scale-98 transition-all group"
+                      onClick={() => setActiveTab('code')}
+                      className="bg-gradient-to-r from-[#7c3aed] via-[#6366f1] to-[#38bdf8] p-4 rounded-2xl cursor-pointer hover:brightness-110 active:scale-98 transition-all shadow-lg flex items-center space-x-3 text-left"
                     >
-                      <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-white/5 rounded-full blur-xl group-hover:scale-125 transition-all"></div>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-9 h-9 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
-                          <Plus className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-white">Create New Project</h3>
-                          <p className="text-[10px] text-indigo-200 mt-0.5">Start building with your favorite language</p>
-                        </div>
+                      <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 shrink-0">
+                        <Edit3 className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-extrabold text-white leading-tight">Create New Project</h2>
+                        <p className="text-[10px] text-white/90 mt-0.5">Start building with your favorite language</p>
                       </div>
                     </div>
 
-                    {/* Split Quick Actions */}
-                    <div className="grid grid-cols-2 gap-3">
+                    {/* Quick 2-Column Split Cards: Workspace & Templates */}
+                    <div className="grid grid-cols-2 gap-2.5">
                       <div 
-                        onClick={() => setActiveTab('files')}
-                        className="bg-[#131520] hover:bg-[#1c1e2e] active:scale-98 transition-all p-3 rounded-xl border border-slate-800/60 cursor-pointer flex items-center space-x-2.5"
+                        onClick={() => setActiveTab('code')}
+                        className="bg-[#151829] hover:bg-[#1a1d33] border border-slate-800/80 p-3 rounded-2xl cursor-pointer transition-all active:scale-95 flex items-center space-x-2.5 text-left"
                       >
-                        <FolderOpen className="w-4 h-4 text-sky-400 shrink-0" />
+                        <List className="w-4 h-4 text-cyan-400 shrink-0" />
                         <div>
-                          <h4 className="text-[11px] font-bold text-white">Workspace</h4>
-                          <p className="text-[9px] text-slate-500">35 files open</p>
+                          <h3 className="text-xs font-bold text-white leading-none">Workspace</h3>
+                          <p className="text-[9px] text-slate-400 mt-1">35 files open</p>
                         </div>
                       </div>
+
                       <div 
                         onClick={() => setActiveTab('templates')}
-                        className="bg-[#131520] hover:bg-[#1c1e2e] active:scale-98 transition-all p-3 rounded-xl border border-slate-800/60 cursor-pointer flex items-center space-x-2.5"
+                        className="bg-[#151829] hover:bg-[#1a1d33] border border-slate-800/80 p-3 rounded-2xl cursor-pointer transition-all active:scale-95 flex items-center space-x-2.5 text-left"
                       >
-                        <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                        <Wrench className="w-4 h-4 text-purple-400 shrink-0" />
                         <div>
-                          <h4 className="text-[11px] font-bold text-white">Templates</h4>
-                          <p className="text-[9px] text-slate-500">Use a starter</p>
+                          <h3 className="text-xs font-bold text-white leading-none">Templates</h3>
+                          <p className="text-[9px] text-slate-400 mt-1">Use a starter template</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Start Coding In Languages */}
-                    <div>
-                      <span className="text-[9px] font-semibold text-slate-500 tracking-wider block mb-2">START CODING IN...</span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {['C', 'C++', 'Java', 'Python', 'HTML', 'CSS', 'JavaScript'].map((lang, idx) => {
-                          const langKey = lang === 'CSS' ? 'css' : lang === 'JavaScript' ? 'javascript' : lang.toLowerCase();
-                          return (
-                            <button 
-                              key={idx}
-                              onClick={() => {
-                                const matchedFile = filesList.find(f => f.language === langKey || f.name.endsWith('.' + langKey));
-                                if (matchedFile) handleOpenFile(matchedFile);
-                              }}
-                              className="bg-[#131520] hover:bg-slate-800 border border-slate-800 text-[10px] text-slate-300 py-1 px-2.5 rounded-full flex items-center space-x-1 active:scale-95 transition-all cursor-pointer"
-                            >
-                              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-                              <span>{lang}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* App Guide Banner */}
-                    <div className="bg-[#131520] border border-blue-900/25 p-2.5 rounded-xl flex items-center space-x-2">
-                      <Info className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                      <span className="text-[9px] text-slate-400 leading-normal">
-                        <strong>New here?</strong> Secure cloud compilers run your scripts instantly on click.
-                      </span>
-                    </div>
-
-                    {/* Active Workspace Files list */}
-                    <div>
-                      <span className="text-[9px] font-semibold text-slate-500 tracking-wider block mb-2">YOUR WORKSPACE</span>
-                      <div className="bg-[#131520] rounded-xl border border-slate-800/60 overflow-hidden divide-y divide-slate-800/40">
-                        {filesList.slice(0, 3).map((file, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => handleOpenFile(file)}
-                            className="p-2.5 flex justify-between items-center hover:bg-slate-800/40 active:bg-slate-800 transition-all cursor-pointer"
-                          >
-                            <div className="flex items-center space-x-2.5 overflow-hidden">
-                              <div className="w-6 h-6 bg-slate-800 rounded-lg flex items-center justify-center font-mono text-[9px] font-bold text-slate-300">
-                                {file.name.split('.').pop()?.toUpperCase() === 'JS' ? 'JS' : file.name.split('.').pop()?.toUpperCase()}
-                              </div>
-                              <span className="text-[11px] font-medium text-slate-200 truncate">{file.name}</span>
-                            </div>
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-                          </div>
-                        ))}
-                      </div>
-                      
-                      <button 
-                        onClick={() => setActiveTab('files')}
-                        className="w-full mt-3 bg-[#1e2132] hover:bg-indigo-900/30 text-indigo-300 font-bold text-[11px] py-2 px-4 rounded-xl border border-indigo-900/30 transition-all active:scale-95 cursor-pointer"
-                      >
-                        Resume Workspace
-                      </button>
-                    </div>
-
-                  </div>
-                )}
-
-                {/* 2. CODE TAB */}
-                {activeTab === 'code' && (
-                  <div className="p-4 space-y-4">
-                    <h2 className="text-base font-bold text-white tracking-tight pt-1">Code Workspace</h2>
-                    
-                    {/* Continue Coding banner */}
-                    <div className="bg-[#131520] border border-slate-800 p-3 rounded-xl flex justify-between items-center">
-                      <div className="flex items-center space-x-2.5">
-                        <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                          <Play className="w-4 h-4 text-blue-400" />
-                        </div>
-                        <div>
-                          <span className="text-[9px] text-slate-500 block">CONTINUE CODING</span>
-                          <span className="text-[11px] font-bold text-white">Swap_Using_Pointers.c</span>
-                        </div>
-                      </div>
-                      <button 
-                        onClick={() => {
-                          const file = filesList.find(f => f.name === 'Swap_Using_Pointers.c');
-                          if (file) handleOpenFile(file);
-                        }}
-                        className="bg-blue-600 hover:bg-blue-500 active:scale-95 text-[9px] font-bold text-white py-1.5 px-3 rounded-lg transition-all cursor-pointer"
-                      >
-                        Open Workspace
-                      </button>
-                    </div>
-
-                    {/* Quick Creation Split Buttons */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <button 
-                        onClick={() => {
-                          const newFileObj: MobileFile = {
-                            name: `Untitled_${filesList.length + 1}.py`,
-                            language: 'python',
-                            content: `print("Hello from Android RunCoder!")`
-                          };
-                          setFilesList([newFileObj, ...filesList]);
-                          handleOpenFile(newFileObj);
-                        }}
-                        className="bg-[#131520] hover:bg-[#1a1c29] border border-slate-800 text-left p-3 rounded-xl active:scale-98 transition-all flex flex-col justify-between h-[75px] cursor-pointer"
-                      >
-                        <Plus className="w-4 h-4 text-indigo-400" />
-                        <div>
-                          <h4 className="text-[11px] font-bold text-white">New File</h4>
-                          <p className="text-[8px] text-slate-500">Start coding immediately</p>
-                        </div>
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('files')}
-                        className="bg-[#131520] hover:bg-[#1a1c29] border border-slate-800 text-left p-3 rounded-xl active:scale-98 transition-all flex flex-col justify-between h-[75px] cursor-pointer"
-                      >
-                        <FolderOpen className="w-4 h-4 text-indigo-400" />
-                        <div>
-                          <h4 className="text-[11px] font-bold text-white">Open File</h4>
-                          <p className="text-[8px] text-slate-500">Browse app files</p>
-                        </div>
-                      </button>
-                    </div>
-
-                    {/* Language Filters Title */}
-                    <div>
-                      <span className="text-[9px] font-semibold text-slate-500 tracking-wider block mb-2">QUICK FILTER FILES</span>
+                    {/* START CODING IN... language pills */}
+                    <div className="text-left space-y-2">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">START CODING IN...</span>
                       <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
-                        {['All', 'C', 'C++', 'Java', 'Python', 'HTML'].map((lang, idx) => (
+                        {[
+                          { name: 'C', icon: '⚙' },
+                          { name: 'C++', icon: '⚙+' },
+                          { name: 'Java', icon: '☕' },
+                          { name: 'Python', icon: '🐍' },
+                          { name: 'HTML', icon: '🌐' },
+                          { name: 'CSS', icon: '🍪' }
+                        ].map((l, i) => (
                           <button 
-                            key={idx}
+                            key={i}
                             onClick={() => {
-                              setFileLangFilter(lang);
-                              setActiveTab('files');
+                              const found = allFiles.find(f => f.name.toLowerCase().includes(l.name.toLowerCase()));
+                              if (found) openFileInEditor(found);
+                              else setActiveTab('code');
                             }}
-                            className="bg-[#131520] border border-slate-800 text-[9px] text-slate-400 py-1 px-3 rounded-full shrink-0 whitespace-nowrap active:scale-95 cursor-pointer"
+                            className="bg-[#151829] hover:bg-slate-800 border border-slate-800 text-[10px] font-medium text-slate-300 py-1.5 px-3 rounded-full flex items-center space-x-1.5 shrink-0 cursor-pointer active:scale-95 transition-all"
                           >
-                            {lang}
+                            <span>{l.icon}</span>
+                            <span>{l.name}</span>
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Open Files list count */}
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-[9px] font-semibold text-slate-500 tracking-wider">OPEN FILES (35)</span>
+                    {/* App Guide Info Pill */}
+                    <div className="bg-[#13172b] border border-blue-500/20 py-2 px-3 rounded-full flex items-center justify-center space-x-1.5 cursor-pointer hover:bg-[#191f3b] transition-all">
+                      <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center text-[9px] font-bold text-white">i</div>
+                      <span className="text-[11px] font-bold text-blue-400">New here? Open App Guide</span>
+                    </div>
+
+                    {/* YOUR WORKSPACE Section */}
+                    <div className="text-left space-y-2">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">YOUR WORKSPACE</span>
+                      <div className="bg-[#151829] border border-slate-800/80 rounded-2xl p-4 space-y-3">
+                        <div className="flex items-center space-x-2 text-blue-400 text-xs font-extrabold">
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                          <span>35 Open Files</span>
+                        </div>
+                        <div className="space-y-1 text-xs text-slate-300 pl-2">
+                          <p className="truncate">• Tic_Tac_Toe_Game.js</p>
+                          <p className="truncate">• Shopping_Cart_Simulation.js</p>
+                          <p className="truncate">• Student_Database_Demo.js</p>
+                          <p className="text-[10px] text-slate-500">+ 32 more</p>
+                        </div>
                         <button 
-                          onClick={() => {
-                            if (confirm("Are you sure you want to close all workspace files?")) {
-                              setFilesList([]);
-                            }
-                          }}
-                          className="text-[9px] text-indigo-400 font-bold hover:underline cursor-pointer"
+                          onClick={() => openFileInEditor(INITIAL_FILES[0])}
+                          className="w-full bg-[#1e233d] hover:bg-[#252b4b] text-white font-bold text-xs py-2.5 rounded-xl transition-all active:scale-98 cursor-pointer"
+                        >
+                          Resume Workspace
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+
+                {/* ------------------------------------------------------- */}
+                {/* TAB 2: CODE SCREEN (Screenshot 2)                       */}
+                {/* ------------------------------------------------------- */}
+                {activeTab === 'code' && (
+                  <div className="p-4 space-y-4">
+                    {/* Header */}
+                    <div className="flex justify-between items-center pt-0.5">
+                      <span className="text-xl font-bold text-white tracking-tight">Code</span>
+                      <button 
+                        onClick={() => setActiveTab('settings')}
+                        className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md active:scale-95 transition-all cursor-pointer"
+                      >
+                        <span>★</span>
+                        <span>Go Pro</span>
+                      </button>
+                    </div>
+
+                    {/* CONTINUE CODING Card */}
+                    <div className="text-left space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">CONTINUE CODING</span>
+                      <div className="bg-[#151829] border border-slate-800/80 p-3.5 rounded-2xl flex justify-between items-center">
+                        <div className="flex items-center space-x-2 overflow-hidden">
+                          <Play className="w-3.5 h-3.5 text-blue-400 fill-current shrink-0" />
+                          <span className="text-xs font-bold text-white truncate">{INITIAL_FILES[9].name}</span>
+                        </div>
+                        <button 
+                          onClick={() => openFileInEditor(INITIAL_FILES[9])}
+                          className="bg-[#1e233d] hover:bg-slate-700 text-[10px] font-bold text-slate-200 py-1.5 px-3 rounded-xl shrink-0 cursor-pointer active:scale-95"
+                        >
+                          Open Workspace
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Quick Actions: New File & Open File */}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div 
+                        onClick={() => {
+                          const newF: MobileFile = {
+                            name: `script_${Date.now().toString().slice(-4)}.js`,
+                            language: 'javascript',
+                            content: `// New Javascript File\nconsole.log("Hello from RunCode!");`,
+                            recentlyOpened: true,
+                            timeOpened: 'Just now'
+                          };
+                          setAllFiles([newF, ...allFiles]);
+                          openFileInEditor(newF);
+                        }}
+                        className="bg-[#151829] hover:bg-[#1a1d33] border border-slate-800/80 p-3 rounded-2xl cursor-pointer transition-all active:scale-95 flex items-center space-x-2.5 text-left"
+                      >
+                        <Plus className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <div>
+                          <h3 className="text-xs font-bold text-white leading-none">New File</h3>
+                          <p className="text-[9px] text-slate-400 mt-1">Start coding</p>
+                        </div>
+                      </div>
+
+                      <div 
+                        onClick={() => setActiveTab('files')}
+                        className="bg-[#151829] hover:bg-[#1a1d33] border border-slate-800/80 p-3 rounded-2xl cursor-pointer transition-all active:scale-95 flex items-center space-x-2.5 text-left"
+                      >
+                        <List className="w-4 h-4 text-purple-400 shrink-0" />
+                        <div>
+                          <h3 className="text-xs font-bold text-white leading-none">Open File</h3>
+                          <p className="text-[9px] text-slate-400 mt-1">Browse device</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* START CODING IN... */}
+                    <div className="text-left space-y-2">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">START CODING IN...</span>
+                      <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+                        {[
+                          { name: 'C', icon: '⚙' },
+                          { name: 'C++', icon: '⚙+' },
+                          { name: 'Java', icon: '☕' },
+                          { name: 'Python', icon: '🐍' },
+                          { name: 'HTML', icon: '🌐' },
+                          { name: 'CSS', icon: '🍪' }
+                        ].map((l, i) => (
+                          <button 
+                            key={i}
+                            onClick={() => {
+                              const found = allFiles.find(f => f.name.toLowerCase().includes(l.name.toLowerCase()));
+                              if (found) openFileInEditor(found);
+                            }}
+                            className="bg-[#151829] hover:bg-slate-800 border border-slate-800 text-[10px] font-medium text-slate-300 py-1.5 px-3 rounded-full flex items-center space-x-1.5 shrink-0 cursor-pointer active:scale-95 transition-all"
+                          >
+                            <span>{l.icon}</span>
+                            <span>{l.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* OPEN FILES (35) List */}
+                    <div className="text-left space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-bold text-slate-400 tracking-wider">OPEN FILES ({allFiles.length})</span>
+                        <button 
+                          onClick={() => showToast('All closed')}
+                          className="text-[10px] font-medium text-slate-400 hover:text-white cursor-pointer"
                         >
                           Close All
                         </button>
                       </div>
-                      <div className="bg-[#131520] rounded-xl border border-slate-800/60 overflow-hidden divide-y divide-slate-800/40 max-h-[180px] overflow-y-auto">
-                        {filesList.map((file, idx) => (
+
+                      <div className="bg-[#151829] border border-slate-800/80 rounded-2xl overflow-hidden divide-y divide-slate-800/60">
+                        {allFiles.slice(0, 8).map((file, idx) => (
                           <div 
                             key={idx}
-                            className="p-2.5 flex justify-between items-center hover:bg-slate-800/30 transition-all cursor-pointer"
+                            onClick={() => openFileInEditor(file)}
+                            className="p-3 flex justify-between items-center hover:bg-[#1c2035] cursor-pointer transition-colors"
                           >
-                            <div 
-                              onClick={() => handleOpenFile(file)}
-                              className="flex-1 flex items-center space-x-2 overflow-hidden"
-                            >
-                              <div className="w-5 h-5 bg-slate-800 rounded flex items-center justify-center font-mono text-[8px] font-bold text-slate-400">
-                                {file.name.split('.').pop()?.toUpperCase().slice(0, 3)}
-                              </div>
-                              <span className="text-[11px] font-medium text-slate-200 truncate">{file.name}</span>
-                            </div>
+                            <span className="text-xs font-semibold text-slate-200 truncate pr-2">{file.name}</span>
                             <button 
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setFilesList(filesList.filter((_, fIdx) => fIdx !== idx));
+                                setAllFiles(allFiles.filter(f => f.name !== file.name));
+                                showToast(`Closed ${file.name}`);
                               }}
-                              className="p-1 hover:bg-slate-800 rounded-md"
+                              className="text-slate-500 hover:text-white p-1"
                             >
-                              <X className="w-3 h-3 text-slate-500 hover:text-white" />
+                              <X className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         ))}
@@ -619,12 +1015,24 @@ export default function DeviceMockup() {
                   </div>
                 )}
 
-                {/* 3. TEMPLATES TAB */}
+                {/* ------------------------------------------------------- */}
+                {/* TAB 3: TEMPLATES SCREEN (Screenshot 3)                  */}
+                {/* ------------------------------------------------------- */}
                 {activeTab === 'templates' && (
                   <div className="p-4 space-y-3">
-                    <h2 className="text-base font-bold text-white tracking-tight pt-1">Programming Templates</h2>
-                    
-                    {/* Search Field */}
+                    {/* Header */}
+                    <div className="flex justify-between items-center pt-0.5">
+                      <span className="text-xl font-bold text-white tracking-tight">Templates</span>
+                      <button 
+                        onClick={() => setActiveTab('settings')}
+                        className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md active:scale-95 transition-all cursor-pointer"
+                      >
+                        <span>★</span>
+                        <span>Go Pro</span>
+                      </button>
+                    </div>
+
+                    {/* Search Input */}
                     <div className="relative">
                       <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input 
@@ -632,20 +1040,20 @@ export default function DeviceMockup() {
                         placeholder="Search templates..."
                         value={templateSearch}
                         onChange={(e) => setTemplateSearch(e.target.value)}
-                        className="w-full bg-[#131520] border border-slate-800 rounded-xl py-2 pl-9 pr-4 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                        className="w-full bg-[#151829] border border-slate-800/80 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
                       />
                     </div>
 
-                    {/* Language chips filters */}
+                    {/* Filter Row 1: Languages */}
                     <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
                       {['All', 'C', 'C++', 'Java', 'Python', 'HTML', 'CSS'].map((lang, idx) => (
                         <button 
                           key={idx}
                           onClick={() => setTemplateLangFilter(lang)}
-                          className={`py-1 px-3 rounded-full text-[9px] font-bold tracking-tight transition-all shrink-0 cursor-pointer ${
+                          className={`py-1 px-3 rounded-full text-[10px] font-bold tracking-tight transition-all shrink-0 cursor-pointer ${
                             templateLangFilter === lang 
                               ? 'bg-blue-600 text-white' 
-                              : 'bg-[#131520] border border-slate-800 text-slate-400 hover:text-white'
+                              : 'bg-[#151829] border border-slate-800/80 text-slate-400 hover:text-white'
                           }`}
                         >
                           {lang}
@@ -653,112 +1061,140 @@ export default function DeviceMockup() {
                       ))}
                     </div>
 
-                    {/* Difficulty level filters */}
-                    <div className="flex space-x-1 border-b border-slate-800/60 pb-1.5">
-                      {['All', 'Beginner', 'Intermediate', 'Advanced'].map((level, idx) => (
+                    {/* Filter Row 2: Difficulty */}
+                    <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+                      {['All', 'Beginner', 'Intermediate', 'Advanced'].map((lvl, idx) => (
                         <button 
                           key={idx}
-                          onClick={() => setTemplateLevelFilter(level)}
-                          className={`py-1 px-2.5 rounded-lg text-[9px] font-medium transition-all cursor-pointer ${
-                            templateLevelFilter === level 
-                              ? 'bg-indigo-900/40 text-indigo-300 border border-indigo-800' 
-                              : 'text-slate-500 hover:text-slate-300'
+                          onClick={() => setTemplateLevelFilter(lvl)}
+                          className={`py-1 px-3 rounded-full text-[10px] font-bold tracking-tight transition-all shrink-0 cursor-pointer ${
+                            templateLevelFilter === lvl 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-[#151829] border border-slate-800/80 text-slate-400 hover:text-white'
                           }`}
                         >
-                          {level}
+                          {lvl}
                         </button>
                       ))}
                     </div>
 
-                    {/* Template list */}
-                    <div className="space-y-3 overflow-y-auto max-h-[300px]">
-                      {filteredTemplates.length > 0 ? (
-                        filteredTemplates.map((item, idx) => (
-                          <div key={idx} className="bg-[#131520] border border-slate-800 rounded-xl p-3 space-y-2.5">
-                            <div className="flex justify-between items-start">
-                              <span className="bg-slate-800/80 text-blue-400 font-mono text-[8px] font-bold px-2 py-0.5 rounded uppercase">
-                                {item.language}
-                              </span>
-                              <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${
-                                item.level === 'Beginner' ? 'bg-emerald-500/10 text-emerald-400' :
-                                item.level === 'Intermediate' ? 'bg-amber-500/10 text-amber-400' :
-                                'bg-purple-500/10 text-purple-400'
-                              }`}>
-                                {item.level}
-                              </span>
-                            </div>
-                            <div>
-                              <h3 className="text-xs font-bold text-white leading-snug">{item.title}</h3>
-                              <p className="text-[9px] text-slate-400 leading-normal mt-0.5">{item.description}</p>
-                            </div>
-                            <div className="flex space-x-2 pt-1">
-                              <button 
-                                onClick={() => {
-                                  // Open in editor
-                                  const tempFile: MobileFile = {
-                                    name: item.title.replace(/\s+/g, '_') + '.' + (item.language === 'cpp' ? 'cpp' : item.language === 'javascript' ? 'js' : item.language),
-                                    language: item.language,
-                                    content: item.code
-                                  };
-                                  setFilesList([tempFile, ...filesList]);
-                                  handleOpenFile(tempFile);
-                                }}
-                                className="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-[10px] font-bold text-white py-1.5 px-2 rounded-lg transition-all cursor-pointer text-center"
-                              >
-                                Open Editor
-                              </button>
-                              <button 
-                                onClick={() => {
-                                  navigator.clipboard.writeText(item.code);
-                                  setCopiedTemplate(item.title);
-                                  setTimeout(() => setCopiedTemplate(null), 2000);
-                                }}
-                                className="bg-[#1e2132] hover:bg-[#282d44] text-slate-300 py-1.5 px-3 rounded-lg text-[10px] active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-                              >
-                                {copiedTemplate === item.title ? (
-                                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                ) : (
-                                  <Copy className="w-3.5 h-3.5" />
-                                )}
-                              </button>
-                            </div>
+                    {/* RECENTLY OPENED Templates list */}
+                    <div className="text-left space-y-2.5 pt-1">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">RECENTLY OPENED</span>
+                      
+                      {filteredTemplates.slice(0, 5).map((tmpl, idx) => (
+                        <div 
+                          key={idx}
+                          className="bg-[#151829] border border-slate-800/80 rounded-2xl p-3.5 space-y-2.5 shadow-sm"
+                        >
+                          <div className="flex justify-between items-start">
+                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono ${
+                              tmpl.language === 'cpp' ? 'bg-blue-500/20 text-blue-400' :
+                              tmpl.language === 'java' ? 'bg-orange-500/20 text-orange-400' :
+                              tmpl.language === 'python' ? 'bg-amber-500/20 text-amber-400' :
+                              tmpl.language === 'c' ? 'bg-indigo-500/20 text-indigo-400' :
+                              'bg-rose-500/20 text-rose-400'
+                            }`}>
+                              {tmpl.languageLabel || tmpl.language.toUpperCase()}
+                            </span>
+                            <Star className="w-4 h-4 text-slate-400 hover:text-amber-400 cursor-pointer" />
                           </div>
-                        ))
-                      ) : (
-                        <p className="text-[10px] text-slate-500 text-center py-4">No matching templates found.</p>
-                      )}
+
+                          <div>
+                            <h3 className="text-xs font-bold text-white">{tmpl.title}</h3>
+                            <p className="text-[10px] text-slate-400 mt-0.5">{tmpl.description}</p>
+                          </div>
+
+                          {/* Show I/O toggle */}
+                          <button 
+                            onClick={() => setExpandedTemplateId(expandedTemplateId === tmpl.id ? null : tmpl.id)}
+                            className="text-[10px] text-blue-400 font-semibold flex items-center space-x-1 cursor-pointer hover:underline"
+                          >
+                            <span>Show I/O</span>
+                            <ChevronDown className={`w-3 h-3 transition-transform ${expandedTemplateId === tmpl.id ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          {/* Expandable Code Preview */}
+                          {expandedTemplateId === tmpl.id && (
+                            <div className="bg-[#090b14] p-2 rounded-xl text-[9px] font-mono text-slate-300 overflow-x-auto max-h-32 border border-slate-800">
+                              <pre>{tmpl.code}</pre>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex space-x-2 pt-1">
+                            <button 
+                              onClick={() => {
+                                const newF: MobileFile = {
+                                  name: `${tmpl.title.replace(/\s+/g, '_')}${tmpl.extension}`,
+                                  language: tmpl.language as any,
+                                  content: tmpl.code,
+                                  recentlyOpened: true,
+                                  timeOpened: 'Just now'
+                                };
+                                setAllFiles([newF, ...allFiles]);
+                                openFileInEditor(newF);
+                              }}
+                              className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] py-2 rounded-xl transition-all active:scale-98 cursor-pointer"
+                            >
+                              Open in Editor
+                            </button>
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(tmpl.code);
+                                showToast('Code copied');
+                              }}
+                              className="flex-1 bg-[#1e233d] hover:bg-[#252b4b] text-slate-200 font-bold text-[10px] py-2 rounded-xl transition-all active:scale-98 cursor-pointer"
+                            >
+                              Copy Code
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
 
                   </div>
                 )}
 
-                {/* 4. FILES TAB */}
+                {/* ------------------------------------------------------- */}
+                {/* TAB 4: FILES SCREEN (Screenshot 4)                      */}
+                {/* ------------------------------------------------------- */}
                 {activeTab === 'files' && (
                   <div className="p-4 space-y-3">
-                    <h2 className="text-base font-bold text-white tracking-tight pt-1">File Explorer</h2>
+                    {/* Header */}
+                    <div className="flex justify-between items-center pt-0.5">
+                      <span className="text-xl font-bold text-white tracking-tight">Files</span>
+                      <button 
+                        onClick={() => setActiveTab('settings')}
+                        className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md active:scale-95 transition-all cursor-pointer"
+                      >
+                        <span>★</span>
+                        <span>Go Pro</span>
+                      </button>
+                    </div>
 
-                    {/* Search Field */}
+                    {/* Search Input */}
                     <div className="relative">
                       <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input 
                         type="text"
                         placeholder="Search files..."
-                        value={fileSearch}
-                        onChange={(e) => setFileSearch(e.target.value)}
-                        className="w-full bg-[#131520] border border-slate-800 rounded-xl py-2 pl-9 pr-4 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                        value={filesSearch}
+                        onChange={(e) => setFilesSearch(e.target.value)}
+                        className="w-full bg-[#151829] border border-slate-800/80 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
                       />
                     </div>
 
-                    {/* Quick filter chips */}
+                    {/* Filter Pills */}
                     <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
-                      {['All', 'C', 'C++', 'Java', 'Python', 'HTML', 'JavaScript'].map((lang, idx) => (
+                      {['All', 'C', 'C++', 'CSS', 'HTML', 'Java'].map((lang, idx) => (
                         <button 
                           key={idx}
-                          onClick={() => setFileLangFilter(lang)}
-                          className={`py-1 px-3 rounded-full text-[9px] font-bold tracking-tight transition-all shrink-0 cursor-pointer ${
-                            fileLangFilter === lang 
+                          onClick={() => setFilesLangFilter(lang)}
+                          className={`py-1 px-3 rounded-full text-[10px] font-bold tracking-tight transition-all shrink-0 cursor-pointer ${
+                            filesLangFilter === lang 
                               ? 'bg-blue-600 text-white' 
-                              : 'bg-[#131520] border border-slate-800 text-slate-400 hover:text-white'
+                              : 'bg-[#151829] border border-slate-800/80 text-slate-400 hover:text-white'
                           }`}
                         >
                           {lang}
@@ -766,150 +1202,193 @@ export default function DeviceMockup() {
                       ))}
                     </div>
 
-                    {/* Recently opened title */}
-                    <span className="text-[9px] font-semibold text-slate-500 tracking-wider block pt-2">RECENTLY OPENED</span>
+                    {/* RECENTLY OPENED List */}
+                    <div className="text-left space-y-2 pt-1">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">RECENTLY OPENED</span>
 
-                    {/* File list */}
-                    <div className="space-y-1.5 overflow-y-auto max-h-[300px]">
-                      {filteredFiles.length > 0 ? (
-                        filteredFiles.map((file, idx) => (
-                          <div 
-                            key={idx}
-                            onClick={() => handleOpenFile(file)}
-                            className="bg-[#131520] hover:bg-[#1a1c29] border border-slate-800/40 p-2.5 rounded-xl flex justify-between items-center cursor-pointer transition-all active:scale-99"
-                          >
-                            <div className="flex items-center space-x-2.5 overflow-hidden">
-                              <div className="w-7 h-7 bg-indigo-950/40 rounded-lg flex items-center justify-center border border-indigo-900/30">
-                                <FileCode className="w-4 h-4 text-indigo-400" />
+                      <div className="space-y-1.5">
+                        {filteredFiles.map((file, idx) => {
+                          const ext = file.name.split('.').pop()?.toLowerCase();
+                          let badgeText = 'JS';
+                          let badgeColor = 'bg-yellow-500/20 text-yellow-400';
+                          if (ext === 'cpp') { badgeText = 'C++'; badgeColor = 'bg-blue-500/20 text-blue-400'; }
+                          else if (ext === 'java') { badgeText = 'J'; badgeColor = 'bg-orange-500/20 text-orange-400'; }
+                          else if (ext === 'py') { badgeText = 'Py'; badgeColor = 'bg-teal-500/20 text-teal-400'; }
+                          else if (ext === 'css') { badgeText = '{}'; badgeColor = 'bg-purple-500/20 text-purple-400'; }
+                          else if (ext === 'html') { badgeText = '<>'; badgeColor = 'bg-rose-500/20 text-rose-400'; }
+                          else if (ext === 'c') { badgeText = 'C'; badgeColor = 'bg-blue-500/20 text-blue-400'; }
+
+                          return (
+                            <div 
+                              key={idx}
+                              onClick={() => openFileInEditor(file)}
+                              className="bg-[#151829] hover:bg-[#1c2035] p-2.5 rounded-xl flex items-center justify-between cursor-pointer transition-colors active:scale-99 border border-slate-800/60"
+                            >
+                              <div className="flex items-center space-x-2.5 overflow-hidden">
+                                <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-[10px] font-extrabold shrink-0 ${badgeColor}`}>
+                                  {badgeText}
+                                </div>
+                                <span className="text-xs font-semibold text-white truncate">{file.name}</span>
                               </div>
-                              <div className="overflow-hidden">
-                                <h4 className="text-[11px] font-bold text-white truncate leading-snug">{file.name}</h4>
-                                <span className="text-[8px] text-slate-500 block uppercase mt-0.5">{file.language}</span>
+
+                              <div className="flex items-center space-x-1 text-slate-500 shrink-0">
+                                <span className="text-[9px]">{file.timeOpened || 'Just now'}</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2 shrink-0">
-                              <span className="text-[8px] text-slate-600">{file.timeOpened || '5m ago'}</span>
-                              <ChevronRight className="w-3.5 h-3.5 text-slate-700" />
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-[10px] text-slate-500 text-center py-4">No matching files found.</p>
-                      )}
+                          );
+                        })}
+                      </div>
                     </div>
 
                   </div>
                 )}
 
-                {/* 5. SETTINGS TAB */}
+                {/* ------------------------------------------------------- */}
+                {/* TAB 5: SETTINGS SCREEN (Screenshot 5)                   */}
+                {/* ------------------------------------------------------- */}
                 {activeTab === 'settings' && (
-                  <div className="p-4 space-y-4">
-                    <h2 className="text-base font-bold text-white tracking-tight pt-1 font-display">Editor Settings</h2>
-
-                    {/* PRO CTA Banner */}
-                    <div className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 p-3.5 rounded-xl border border-indigo-500/20 flex justify-between items-center">
-                      <div className="flex items-center space-x-2.5">
-                        <div className="w-8 h-8 bg-amber-400/10 rounded-full flex items-center justify-center border border-amber-400/20">
-                          <Sparkles className="w-4 h-4 text-amber-300" />
-                        </div>
-                        <div>
-                          <h4 className="text-[11px] font-bold text-white">RunCoder Pro</h4>
-                          <p className="text-[8px] text-slate-400 leading-normal">Ad-free workspace, unlimited compilation</p>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500" />
+                  <div className="p-4 space-y-4 text-left">
+                    {/* Header */}
+                    <div className="flex justify-between items-center pt-0.5">
+                      <span className="text-xl font-bold text-white tracking-tight">Settings</span>
+                      <button className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md">
+                        <span>★</span>
+                        <span>Go Pro</span>
+                      </button>
                     </div>
 
-                    {/* Editor Customizer Group */}
-                    <div className="space-y-3">
-                      <span className="text-[9px] font-bold text-slate-500 tracking-wider block">PREFERENCES</span>
+                    {/* Section: SUBSCRIPTION */}
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">SUBSCRIPTION</span>
+                      <div className="bg-[#151829] border border-slate-800/80 p-3.5 rounded-2xl flex justify-between items-center">
+                        <div className="flex items-center space-x-2.5">
+                          <Star className="w-4 h-4 text-amber-400 shrink-0" />
+                          <div>
+                            <h3 className="text-xs font-bold text-white">RunCode Pro</h3>
+                            <p className="text-[9px] text-slate-400">Remove ads, unlock everything</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-1 text-slate-300 text-xs font-semibold">
+                          <span>Go Pro</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section: IMPORT */}
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">IMPORT</span>
+                      <div 
+                        onClick={() => showToast('Select file from device')}
+                        className="bg-[#151829] hover:bg-[#1a1d33] border border-slate-800/80 p-3.5 rounded-2xl flex justify-between items-center cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center space-x-2.5">
+                          <Plus className="w-4 h-4 text-slate-300 shrink-0" />
+                          <div>
+                            <h3 className="text-xs font-bold text-white">Import Existing File</h3>
+                            <p className="text-[9px] text-slate-400">Open .c .cpp .java .py files</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                      </div>
+                    </div>
+
+                    {/* Section: EDITOR */}
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">EDITOR</span>
                       
-                      <div className="bg-[#131520] rounded-xl border border-slate-800 divide-y divide-slate-800/50">
-                        {/* Font size */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Font Size</span>
-                          <div className="flex items-center space-x-2">
-                            <button 
-                              disabled={fontSize <= 10}
-                              onClick={() => setFontSize(s => Math.max(10, s - 1))}
-                              className="w-5 h-5 bg-[#1c1e2d] text-slate-300 text-xs font-bold rounded flex items-center justify-center disabled:opacity-30 cursor-pointer"
-                            >
-                              -
-                            </button>
-                            <span className="text-[11px] font-mono font-bold text-white w-8 text-center">{fontSize}sp</span>
-                            <button 
-                              disabled={fontSize >= 24}
-                              onClick={() => setFontSize(s => Math.min(24, s + 1))}
-                              className="w-5 h-5 bg-[#1c1e2d] text-slate-300 text-xs font-bold rounded flex items-center justify-center disabled:opacity-30 cursor-pointer"
-                            >
-                              +
-                            </button>
+                      <div className="bg-[#151829] border border-slate-800/80 rounded-2xl divide-y divide-slate-800/60 overflow-hidden">
+                        
+                        {/* Font size row */}
+                        <div 
+                          onClick={() => {
+                            const next = fontSize === 14 ? 16 : fontSize === 16 ? 12 : 14;
+                            setFontSize(next);
+                            showToast(`Font size: ${next}sp`);
+                          }}
+                          className="p-3.5 flex justify-between items-center cursor-pointer hover:bg-[#1c2035]"
+                        >
+                          <div className="flex items-center space-x-2.5 text-slate-300">
+                            <Edit3 className="w-4 h-4" />
+                            <span className="text-xs font-semibold text-white">Font Size</span>
+                          </div>
+                          <div className="flex items-center space-x-1 text-slate-400 text-xs">
+                            <span>{fontSize}sp</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
                           </div>
                         </div>
 
-                        {/* Font selection */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Editor Font</span>
-                          <select 
-                            value={selectedFont}
-                            onChange={(e) => setSelectedFont(e.target.value as any)}
-                            className="bg-[#1c1e2d] border border-slate-800 text-[10px] text-white rounded-lg p-1 px-2 focus:outline-none"
-                          >
-                            <option value="Default">Default System</option>
-                            <option value="Fira Code">Fira Code</option>
-                            <option value="JetBrains Mono">JetBrains Mono</option>
-                          </select>
-                        </div>
-
-                        {/* Syntax highlighting */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Syntax Highlighting</span>
+                        {/* Syntax Highlighting */}
+                        <div className="p-3.5 flex justify-between items-center">
+                          <div className="flex items-center space-x-2.5 text-slate-300">
+                            <Star className="w-4 h-4" />
+                            <span className="text-xs font-semibold text-white">Syntax Highlighting</span>
+                          </div>
                           <button 
                             onClick={() => setSyntaxHighlighting(!syntaxHighlighting)}
-                            className={`w-8 h-4.5 rounded-full p-0.5 transition-colors ${syntaxHighlighting ? 'bg-blue-600' : 'bg-slate-800'}`}
+                            className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${syntaxHighlighting ? 'bg-blue-600' : 'bg-slate-700'}`}
                           >
-                            <div className={`w-3.5 h-3.5 rounded-full bg-white transition-transform ${syntaxHighlighting ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${syntaxHighlighting ? 'translate-x-4' : 'translate-x-0'}`} />
                           </button>
                         </div>
 
-                        {/* Word wrap */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Word Wrap</span>
+                        {/* Word Wrap */}
+                        <div className="p-3.5 flex justify-between items-center">
+                          <div className="flex items-center space-x-2.5 text-slate-300">
+                            <List className="w-4 h-4" />
+                            <span className="text-xs font-semibold text-white">Word Wrap</span>
+                          </div>
                           <button 
                             onClick={() => setWordWrap(!wordWrap)}
-                            className={`w-8 h-4.5 rounded-full p-0.5 transition-colors ${wordWrap ? 'bg-blue-600' : 'bg-slate-800'}`}
+                            className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${wordWrap ? 'bg-blue-600' : 'bg-slate-700'}`}
                           >
-                            <div className={`w-3.5 h-3.5 rounded-full bg-white transition-transform ${wordWrap ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${wordWrap ? 'translate-x-4' : 'translate-x-0'}`} />
                           </button>
                         </div>
 
                         {/* Line Numbers */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Line Numbers</span>
+                        <div className="p-3.5 flex justify-between items-center">
+                          <div className="flex items-center space-x-2.5 text-slate-300">
+                            <List className="w-4 h-4" />
+                            <span className="text-xs font-semibold text-white">Line Numbers</span>
+                          </div>
                           <button 
                             onClick={() => setLineNumbers(!lineNumbers)}
-                            className={`w-8 h-4.5 rounded-full p-0.5 transition-colors ${lineNumbers ? 'bg-blue-600' : 'bg-slate-800'}`}
+                            className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${lineNumbers ? 'bg-blue-600' : 'bg-slate-700'}`}
                           >
-                            <div className={`w-3.5 h-3.5 rounded-full bg-white transition-transform ${lineNumbers ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${lineNumbers ? 'translate-x-4' : 'translate-x-0'}`} />
                           </button>
                         </div>
 
-                        {/* Auto save */}
-                        <div className="p-3 flex justify-between items-center">
-                          <span className="text-[11px] text-slate-300">Auto Save</span>
+                        {/* Auto Save */}
+                        <div className="p-3.5 flex justify-between items-center">
+                          <div>
+                            <div className="flex items-center space-x-2.5 text-slate-300">
+                              <Check className="w-4 h-4" />
+                              <span className="text-xs font-semibold text-white">Auto Save</span>
+                            </div>
+                            <p className="text-[9px] text-slate-400 mt-0.5 pl-6.5">Keep your files and open tabs after closing the app.</p>
+                          </div>
                           <button 
                             onClick={() => setAutoSave(!autoSave)}
-                            className={`w-8 h-4.5 rounded-full p-0.5 transition-colors ${autoSave ? 'bg-blue-600' : 'bg-slate-800'}`}
+                            className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer shrink-0 ${autoSave ? 'bg-blue-600' : 'bg-slate-700'}`}
                           >
-                            <div className={`w-3.5 h-3.5 rounded-full bg-white transition-transform ${autoSave ? 'translate-x-3.5' : 'translate-x-0'}`}></div>
+                            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${autoSave ? 'translate-x-4' : 'translate-x-0'}`} />
                           </button>
                         </div>
+
                       </div>
                     </div>
 
-                    <p className="text-[9px] text-slate-500 text-center leading-normal">
-                      RunCoder Android IDE 1.0.0 Stable<br/>Developed with Google Material Design 3 guidelines.
-                    </p>
+                    {/* Section: FONTS */}
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-slate-400 tracking-wider">FONTS</span>
+                      <div className="bg-[#151829] border border-slate-800/80 p-3 rounded-2xl flex justify-between items-center">
+                        <span className="text-xs font-bold text-white">{selectedFont}</span>
+                        <Check className="w-4 h-4 text-blue-400" />
+                      </div>
+                    </div>
 
                   </div>
                 )}
@@ -917,324 +1396,420 @@ export default function DeviceMockup() {
               </motion.div>
             )}
 
-            {/* LIVE SIMULATOR ACTIVE EDITOR VIEW */}
-            {activeView === 'editor' && currentFile && (
+            {/* ========================================================= */}
+            {/* VIEW 2: CODE EDITOR SCREEN (Screenshot 6)                  */}
+            {/* ========================================================= */}
+            {activeView === 'editor' && (
               <motion.div 
                 key="editor-view"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.15 }}
-                className="flex-1 flex flex-col h-full bg-[#090a0f]"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="flex-1 flex flex-col h-full bg-[#0c0e18]"
               >
-                {/* Editor Header toolbar */}
-                <div className="bg-[#0d0e15] border-b border-slate-900 px-3.5 py-2 flex justify-between items-center shrink-0">
-                  <div className="flex items-center space-x-2 overflow-hidden">
+                {/* Top App Bar with back button, tabs, preview / run action, overflow menu */}
+                <div className="bg-[#151829] border-b border-slate-800 px-2 py-1.5 flex items-center justify-between shrink-0">
+                  <div className="flex items-center space-x-1 overflow-hidden">
                     <button 
                       onClick={() => setActiveView('tabs')}
-                      className="p-1 hover:bg-slate-800 rounded-lg text-slate-400"
+                      className="p-1 text-slate-400 hover:text-white cursor-pointer shrink-0"
                     >
-                      <X className="w-4 h-4" />
+                      <ArrowLeft className="w-4 h-4" />
                     </button>
-                    <span className="text-[11px] font-mono font-bold text-slate-200 truncate">{currentFile.name}</span>
+
+                    {/* Tab pills */}
+                    <div className="flex space-x-1 overflow-x-auto scrollbar-none max-w-[170px]">
+                      {openTabs.map((tab, i) => {
+                        const isCurrent = tab.name === currentFile.name;
+                        return (
+                          <div 
+                            key={i}
+                            onClick={() => setCurrentFile(tab)}
+                            className={`flex items-center space-x-1 text-[10px] font-mono py-1 px-2 rounded-lg cursor-pointer shrink-0 ${
+                              isCurrent ? 'bg-[#242b47] text-cyan-300 font-bold border border-cyan-500/30' : 'bg-[#10121f] text-slate-400'
+                            }`}
+                          >
+                            <span className="truncate max-w-[80px]">{tab.name}</span>
+                            <button 
+                              onClick={(e) => closeTab(tab.name, e)}
+                              className="text-slate-500 hover:text-white"
+                            >
+                              <X className="w-2.5 h-2.5" />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button 
+                      onClick={() => {
+                        const newF: MobileFile = {
+                          name: `untitled_${Date.now().toString().slice(-4)}.js`,
+                          language: 'javascript',
+                          content: `// New script\nconsole.log("RunCode v2.0");`,
+                          recentlyOpened: true,
+                          timeOpened: 'Just now'
+                        };
+                        setAllFiles([newF, ...allFiles]);
+                        openFileInEditor(newF);
+                      }}
+                      className="p-1 text-slate-400 hover:text-white shrink-0"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
                   </div>
+
                   <div className="flex items-center space-x-1.5 shrink-0">
-                    {/* Live Preview Button (only for JS/HTML representing the TicTacToe or DOM renderer) */}
-                    {(currentFile.language === 'javascript' || currentFile.language === 'html') && (
+                    {/* Preview (for Web files) or Run (for compiled languages) */}
+                    {(currentFile.language === 'javascript' || currentFile.language === 'html' || currentFile.language === 'css') ? (
                       <button 
-                        onClick={() => {
-                          if (currentFile.name === 'Tic_Tac_Toe_Game.js') {
-                            setTttBoard(Array(9).fill(null));
-                            setTttWinner(null);
-                          }
-                          setActiveView('preview');
-                        }}
-                        className="bg-indigo-600/30 hover:bg-indigo-500/30 text-indigo-300 font-bold text-[9px] py-1 px-2.5 rounded-lg border border-indigo-500/20 active:scale-95 transition-all cursor-pointer"
+                        onClick={() => setActiveView('preview')}
+                        className="flex items-center space-x-1 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-bold py-1 px-2.5 rounded-lg active:scale-95 transition-all cursor-pointer shadow-sm"
                       >
-                        Preview App
+                        <Eye className="w-3 h-3" />
+                        <span>Preview</span>
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={handleExecute}
+                        className="flex items-center space-x-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold py-1 px-2.5 rounded-lg active:scale-95 transition-all cursor-pointer shadow-sm"
+                      >
+                        <Play className="w-3 h-3 fill-current" />
+                        <span>Run</span>
                       </button>
                     )}
-                    
-                    <button 
-                      onClick={handleRunCode}
-                      disabled={isCompiling}
-                      className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-[10px] py-1 px-2.5 rounded-lg shadow-md flex items-center space-x-1.5 disabled:opacity-40 active:scale-95 transition-all cursor-pointer shrink-0"
-                    >
-                      <Play className="w-3 h-3 text-white fill-current shrink-0" />
-                      <span>{isCompiling ? 'Running...' : 'Run'}</span>
+
+                    <button className="p-1 text-slate-400 hover:text-white">
+                      <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                {/* Editor textarea and code representation */}
-                <div className="flex-1 flex overflow-hidden text-left relative min-h-0">
-                  {/* Simulated Line numbers gutter */}
+                {/* Editor Text Area with Line Numbers */}
+                <div className="flex-1 flex overflow-hidden relative text-left bg-[#0c0e18]">
+                  
+                  {/* Line numbers gutter */}
                   {lineNumbers && (
-                    <div className="bg-[#090a0f] border-r border-slate-900/60 font-mono text-[10px] text-slate-600 py-3 px-2 select-none text-right shrink-0">
-                      {currentFile.content.split('\n').map((_, i) => (
-                        <div key={i} className="h-5 leading-5 w-4">{i + 1}</div>
+                    <div className="w-7 py-3 bg-[#0c0e18] border-r border-slate-800/40 text-slate-600 text-right pr-2 select-none font-mono text-[10px] leading-relaxed shrink-0">
+                      {Array.from({ length: 35 }).map((_, i) => (
+                        <div key={i}>{i + 1}</div>
                       ))}
                     </div>
                   )}
 
-                  {/* Code editor container */}
-                  <textarea 
-                    style={{ 
-                      fontSize: `${fontSize}px`,
-                      fontFamily: selectedFont === 'Default' ? 'sans-serif' : 'var(--font-mono)'
-                    }}
-                    value={currentFile.content}
-                    onChange={(e) => {
-                      const updatedFile = { ...currentFile, content: e.target.value };
-                      setCurrentFile(updatedFile);
-                      // Update main files list list too
-                      setFilesList(filesList.map(f => f.name === currentFile.name ? updatedFile : f));
-                    }}
-                    spellCheck="false"
-                    className={`flex-1 bg-[#090a0f] text-slate-300 font-mono py-3 px-3 overflow-auto focus:outline-none resize-none leading-5 scrollbar-none focus:ring-0 ${
-                      wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre'
-                    }`}
-                  />
+                  {/* Code text */}
+                  <div className="flex-1 p-3 overflow-y-auto font-mono text-[11px] leading-relaxed text-slate-200">
+                    <textarea 
+                      value={currentFile.content}
+                      onChange={(e) => {
+                        const updated = { ...currentFile, content: e.target.value };
+                        setCurrentFile(updated);
+                        setOpenTabs(openTabs.map(t => t.name === currentFile.name ? updated : t));
+                        setAllFiles(allFiles.map(f => f.name === currentFile.name ? updated : f));
+                      }}
+                      className="w-full h-full bg-transparent resize-none border-none outline-none text-slate-200 font-mono focus:ring-0"
+                      spellCheck={false}
+                    />
+                  </div>
+
+                  {/* Floating Terminal Pill on Bottom Right */}
+                  <button 
+                    onClick={() => setIsTerminalOpen(!isTerminalOpen)}
+                    className="absolute bottom-10 right-3 bg-[#1e233d] hover:bg-[#252b4b] border border-slate-700 text-white text-[10px] font-bold py-1.5 px-3 rounded-full shadow-xl flex items-center space-x-1.5 cursor-pointer z-30"
+                  >
+                    <span>Terminal</span>
+                    <span>▲</span>
+                  </button>
+
+                  {/* Slide-up Terminal Drawer */}
+                  <AnimatePresence>
+                    {isTerminalOpen && (
+                      <motion.div 
+                        initial={{ y: 150 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 150 }}
+                        className="absolute bottom-8 left-0 right-0 h-44 bg-[#090b14] border-t border-slate-700 p-3 flex flex-col z-20 shadow-2xl"
+                      >
+                        <div className="flex justify-between items-center pb-1 border-b border-slate-800 text-[10px] text-slate-400">
+                          <span className="font-bold text-emerald-400 flex items-center space-x-1">
+                            <Terminal className="w-3 h-3" />
+                            <span>Terminal Output</span>
+                          </span>
+                          <button onClick={() => setIsTerminalOpen(false)} className="text-slate-400 hover:text-white">
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto font-mono text-[9px] text-slate-300 space-y-1 pt-1 text-left">
+                          {consoleLogs.map((log, i) => (
+                            <p key={i}>{log}</p>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                 </div>
 
-                {/* Simulated Editor Quick keys bar */}
-                <div className="bg-[#0c0d12] border-t border-slate-900/60 p-1 flex space-x-1.5 overflow-x-auto scrollbar-none shrink-0 font-mono">
-                  {['Save', 'Rename', 'TAB', '{', '}', '(', ')', ';', '[', ']', '<', '>'].map((key, i) => (
-                    <button 
-                      key={i} 
-                      onClick={() => {
-                        if (!currentFile) return;
-                        let textToInsert = '';
-                        if (key === 'TAB') textToInsert = '    ';
-                        else if (key === 'Save') {
-                          alert("Code saved successfully to your Android workspace!");
-                          return;
-                        } else if (key === 'Rename') {
-                          const newName = prompt("Enter new filename:", currentFile.name);
-                          if (newName) {
-                            const updated = { ...currentFile, name: newName };
-                            setCurrentFile(updated);
-                            setFilesList(filesList.map(f => f.name === currentFile.name ? updated : f));
-                          }
-                          return;
-                        } else {
-                          textToInsert = key;
-                        }
-                        
-                        // Append text to current file
-                        const updated = { ...currentFile, content: currentFile.content + textToInsert };
+                {/* Status Bar */}
+                <div className="bg-[#101322] border-t border-slate-800/60 px-3 py-1 text-[9px] text-slate-400 font-mono flex justify-between items-center select-none shrink-0">
+                  <span>{currentFile.language.toUpperCase()} | UTF-8 | Ln 1, Col 1</span>
+                  <span>{fontSize}sp</span>
+                </div>
+
+                {/* Bottom Symbol & Action Bar */}
+                <div className="bg-[#151829] border-t border-slate-800 py-1.5 px-2 flex space-x-1 overflow-x-auto scrollbar-none select-none shrink-0">
+                  <button 
+                    onClick={() => showToast(`Saved ${currentFile.name}`)}
+                    className="bg-[#1e233d] hover:bg-slate-700 text-slate-200 text-[10px] font-bold py-1 px-2.5 rounded-lg flex items-center space-x-1 shrink-0 cursor-pointer"
+                  >
+                    <Save className="w-3 h-3" />
+                    <span>Save</span>
+                  </button>
+                  <button 
+                    onClick={() => {
+                      const newN = prompt('Enter new file name:', currentFile.name);
+                      if (newN) {
+                        const updated = { ...currentFile, name: newN };
                         setCurrentFile(updated);
-                        setFilesList(filesList.map(f => f.name === currentFile.name ? updated : f));
+                        setOpenTabs(openTabs.map(t => t.name === currentFile.name ? updated : t));
+                        setAllFiles(allFiles.map(f => f.name === currentFile.name ? updated : f));
+                      }
+                    }}
+                    className="bg-[#1e233d] hover:bg-slate-700 text-slate-200 text-[10px] font-bold py-1 px-2.5 rounded-lg flex items-center space-x-1 shrink-0 cursor-pointer"
+                  >
+                    <Edit3 className="w-3 h-3" />
+                    <span>Rename</span>
+                  </button>
+                  {['TAB', '{', '}', '(', ')', ';', '"', '\'', '=', '<', '>', '+', '-', '*', '/'].map((sym, i) => (
+                    <button 
+                      key={i}
+                      onClick={() => {
+                        const add = sym === 'TAB' ? '  ' : sym;
+                        const updated = { ...currentFile, content: currentFile.content + add };
+                        setCurrentFile(updated);
                       }}
-                      className="bg-[#131520] hover:bg-slate-800 text-[10px] text-slate-400 py-1.5 px-3 rounded-lg active:scale-90 transition-all font-bold shrink-0 cursor-pointer"
+                      className="bg-[#101322] hover:bg-slate-800 text-slate-300 text-[10px] font-mono font-bold py-1 px-2.5 rounded-lg shrink-0 cursor-pointer active:scale-95"
                     >
-                      {key}
+                      {sym}
                     </button>
                   ))}
-                </div>
-
-                {/* Cloud Execution Console Terminal at bottom */}
-                <div className="border-t border-slate-900 bg-[#090b11] shrink-0 font-mono text-[9px] flex flex-col max-h-[170px] min-h-[100px] overflow-hidden text-left">
-                  <div className="bg-[#0d0e15] px-3.5 py-1.5 flex justify-between items-center text-slate-400 shrink-0 border-b border-slate-900">
-                    <div className="flex items-center space-x-1.5 font-bold">
-                      <Terminal className="w-3 h-3 text-emerald-400" />
-                      <span className="text-white text-[10px]">Cloud Terminal</span>
-                    </div>
-                    <button 
-                      onClick={() => setShowTerminal(!showTerminal)}
-                      className="text-[9px] text-slate-500 hover:text-white flex items-center space-x-1"
-                    >
-                      <span>{showTerminal ? 'Hide Console' : 'Show Console'}</span>
-                      <ChevronDown className={`w-3 h-3 transition-transform ${showTerminal ? '' : 'rotate-180'}`} />
-                    </button>
-                  </div>
-                  
-                  {showTerminal && (
-                    <div className="flex-1 p-3 overflow-y-auto space-y-1 bg-[#06070a] select-text">
-                      {consoleLogs.map((log, i) => (
-                        <div key={i} className={`whitespace-pre-wrap leading-relaxed ${
-                          log.startsWith('✔') || log.startsWith('✅') ? 'text-emerald-400 font-bold' :
-                          log.startsWith('⏳') || log.startsWith('📡') ? 'text-blue-400' :
-                          log.startsWith('🚀') ? 'text-purple-400 font-bold' :
-                          log.startsWith('☕') ? 'text-slate-400' : 'text-slate-300'
-                        }`}>
-                          {log}
-                        </div>
-                      ))}
-                      {isCompiling && (
-                        <div className="text-slate-400 animate-pulse flex items-center space-x-1">
-                          <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce"></span>
-                          <span>Compiling cloud assets...</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
 
               </motion.div>
             )}
 
-            {/* LIVE PREVIEW GAME PANEL */}
+            {/* ========================================================= */}
+            {/* VIEW 3: LIVE WEB PREVIEW / GAME (Screenshots 7 & 8)        */}
+            {/* ========================================================= */}
             {activeView === 'preview' && (
               <motion.div 
                 key="preview-view"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.15 }}
-                className="flex-1 flex flex-col h-full bg-[#0a0a0f]"
+                className="flex-1 flex flex-col h-full bg-[#0c0e18]"
               >
-                {/* Header back bar */}
-                <div className="bg-[#0d0e15] border-b border-slate-900 px-3.5 py-2.5 flex justify-between items-center shrink-0">
-                  <div className="flex items-center space-x-2">
+                {/* Preview Top Header */}
+                <div className="bg-[#151829] border-b border-slate-800 px-3 py-2 flex items-center justify-between shrink-0">
+                  <div className="flex items-center space-x-2 overflow-hidden text-left">
                     <button 
                       onClick={() => setActiveView('editor')}
-                      className="p-1 hover:bg-slate-800 rounded-lg text-slate-400"
+                      className="p-1 text-slate-400 hover:text-white cursor-pointer shrink-0"
                     >
-                      <X className="w-4 h-4" />
+                      <ArrowLeft className="w-4 h-4" />
                     </button>
-                    <span className="text-[10px] font-bold text-slate-400 truncate">Previewing Tic_Tac_Toe_Game.js</span>
+                    <div className="overflow-hidden">
+                      <div className="text-[9px] text-slate-400">Previewing</div>
+                      <div className="text-xs font-bold text-white truncate max-w-[180px]">{currentFile.name}</div>
+                    </div>
                   </div>
-                  <Share2 className="w-4 h-4 text-slate-500 hover:text-white cursor-pointer shrink-0" />
+
+                  <button 
+                    onClick={() => showToast('Share link copied')}
+                    className="p-1 text-slate-400 hover:text-white cursor-pointer"
+                  >
+                    <Share2 className="w-4 h-4" />
+                  </button>
                 </div>
 
-                {/* Preview Tabs: Preview / Console */}
-                <div className="bg-[#0d0e15] border-b border-slate-900 flex shrink-0">
+                {/* Dual Tab Switch: Preview vs Console */}
+                <div className="flex bg-[#101322] border-b border-slate-800 shrink-0">
                   <button 
                     onClick={() => setPreviewTab('preview')}
-                    className={`flex-1 py-2 text-[10px] font-bold transition-all border-b-2 text-center cursor-pointer ${
-                      previewTab === 'preview' ? 'border-indigo-500 text-white bg-slate-900/30' : 'border-transparent text-slate-500 hover:text-slate-300'
+                    className={`flex-1 py-2 text-xs font-bold cursor-pointer transition-colors relative ${
+                      previewTab === 'preview' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
                     }`}
                   >
-                    Live Preview
+                    <span>Preview</span>
+                    {previewTab === 'preview' && (
+                      <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-blue-500 rounded-full" />
+                    )}
                   </button>
                   <button 
                     onClick={() => setPreviewTab('console')}
-                    className={`flex-1 py-2 text-[10px] font-bold transition-all border-b-2 text-center cursor-pointer ${
-                      previewTab === 'console' ? 'border-indigo-500 text-white bg-slate-900/30' : 'border-transparent text-slate-500 hover:text-slate-300'
+                    className={`flex-1 py-2 text-xs font-bold cursor-pointer transition-colors relative ${
+                      previewTab === 'console' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
                     }`}
                   >
-                    Console Log
+                    <span>Console</span>
+                    {previewTab === 'console' && (
+                      <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-blue-500 rounded-full" />
+                    )}
                   </button>
                 </div>
 
-                {/* Preview Screen contents */}
+                {/* Preview Content Area */}
                 {previewTab === 'preview' ? (
-                  <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-4">
-                    <div className="text-center">
-                      <h1 className="text-base font-extrabold text-white font-display tracking-tight">Tic Tac Toe</h1>
-                      <div className="flex justify-center items-center space-x-2 mt-1">
+                  currentFile.name.includes('Portfolio') || currentFile.language === 'html' && !currentFile.name.includes('Tic') ? (
+                    
+                    /* Screenshot 8: Live HTML Portfolio Web Page */
+                    <div className="flex-1 bg-white text-slate-900 overflow-y-auto text-left flex flex-col">
+                      <nav className="w-full px-4 py-3 flex justify-between items-center border-b border-slate-100">
+                        <span className="font-extrabold text-base text-blue-600">Alex.dev</span>
+                        <button className="bg-blue-600 text-white font-bold text-xs py-1.5 px-3.5 rounded-lg shadow-sm">Hire Me</button>
+                      </nav>
+                      <div className="flex-1 p-6 text-center space-y-4 flex flex-col justify-center max-w-xs mx-auto">
+                        <h1 className="text-2xl font-black text-slate-900 leading-tight">Building digital products, brands, and experiences.</h1>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          A Senior Frontend Engineer specializing in building exceptional digital experiences with a focus on accessible, semantic, and performant user interfaces.
+                        </p>
+                        <div className="space-y-2 pt-2">
+                          <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2.5 rounded-xl shadow-md cursor-pointer">
+                            View My Work
+                          </button>
+                          <button className="w-full border-1.5 border-blue-600 text-blue-600 font-bold text-xs py-2.5 rounded-xl bg-transparent cursor-pointer">
+                            Download Resume
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                  ) : (
+
+                    /* Screenshot 7: Interactive Tic Tac Toe Game */
+                    <div className="flex-1 bg-[#101222] p-4 flex flex-col items-center justify-center text-center space-y-3 overflow-y-auto">
+                      <h2 className="text-xl font-extrabold text-blue-400">Tic Tac Toe</h2>
+                      
+                      <div className="flex items-center space-x-2 text-[10px] text-slate-400">
                         <select 
-                          className="bg-[#131520] border border-slate-800 text-[8px] text-slate-300 rounded p-0.5 px-1 focus:outline-none"
-                          disabled
+                          value={tttDifficulty}
+                          onChange={(e) => setTttDifficulty(e.target.value)}
+                          className="bg-[#1b1f38] border border-slate-700 text-slate-200 rounded-lg px-2 py-1 outline-none text-[10px]"
                         >
-                          <option>Easy Mode</option>
+                          <option>Easy</option>
+                          <option>Hard</option>
                         </select>
-                        <span className="text-[8px] text-slate-500">Best of 5 Mode</span>
+                        <span>Best of 5 Mode</span>
                       </div>
-                    </div>
 
-                    {/* Scores board */}
-                    <div className="bg-[#131520] rounded-xl p-2.5 grid grid-cols-3 gap-2 w-full max-w-[240px] text-center border border-slate-800/80">
-                      <div>
-                        <span className="text-[8px] font-bold text-rose-400 block uppercase">Player X</span>
-                        <span className="text-xs font-bold text-white">{tttScores.x}</span>
+                      {/* Scoreboard */}
+                      <div className="bg-[#1b1f38] border border-slate-800 rounded-2xl p-2.5 w-full max-w-[260px] flex justify-around text-center">
+                        <div>
+                          <div className="text-[9px] text-rose-400 font-bold">Player X</div>
+                          <div className="text-base font-extrabold text-white">{tttScores.x}</div>
+                        </div>
+                        <div>
+                          <div className="text-[9px] text-slate-400 font-bold">Draws</div>
+                          <div className="text-base font-extrabold text-white">{tttScores.draws}</div>
+                        </div>
+                        <div>
+                          <div className="text-[9px] text-blue-400 font-bold">Computer O</div>
+                          <div className="text-base font-extrabold text-white">{tttScores.o}</div>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-[8px] font-bold text-slate-500 block uppercase">Draws</span>
-                        <span className="text-xs font-bold text-white">{tttScores.draws}</span>
-                      </div>
-                      <div>
-                        <span className="text-[8px] font-bold text-sky-400 block uppercase">Computer O</span>
-                        <span className="text-xs font-bold text-white">{tttScores.o}</span>
-                      </div>
-                    </div>
 
-                    {/* Winner announcement */}
-                    <div className="h-4 flex items-center justify-center">
-                      {tttWinner ? (
-                        <span className="text-[10px] font-bold text-indigo-400">
-                          {tttWinner === 'Draw' ? '🤝 Game drawn!' : `🎉 Winner is ${tttWinner}!`}
-                        </span>
-                      ) : (
-                        <span className="text-[8px] text-slate-500">
-                          {tttIsXNext ? 'Your turn (X)' : 'Computer planning move (O)...'}
-                        </span>
-                      )}
-                    </div>
+                      {/* Status indicator */}
+                      <div className="text-xs font-bold text-white">
+                        {tttWinner ? (
+                          <span className="text-emerald-400">Winner: {tttWinner}!</span>
+                        ) : (
+                          <span className="text-slate-300">Your Turn (X)</span>
+                        )}
+                      </div>
 
-                    {/* Game Grid */}
-                    <div className="grid grid-cols-3 gap-1.5 w-[180px] h-[180px]">
-                      {tttBoard.map((cell, idx) => (
+                      {/* 3x3 Game Board with exact styling */}
+                      <div className="grid grid-cols-3 gap-2 w-full max-w-[240px]">
+                        {tttBoard.map((val, idx) => {
+                          const isWinCell = (tttWinner === 'X' && (idx === 0 || idx === 4 || idx === 6)) || (tttWinner === val && val !== null);
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => handleTttClick(idx)}
+                              className={`h-16 rounded-2xl text-2xl font-black transition-all flex items-center justify-center cursor-pointer ${
+                                isWinCell 
+                                  ? 'bg-[#86efac] text-slate-950 shadow-md' 
+                                  : val === 'O'
+                                  ? 'bg-[#232742] text-blue-400'
+                                  : val === 'X'
+                                  ? 'bg-[#232742] text-rose-400'
+                                  : 'bg-[#181b30] hover:bg-[#202440] text-transparent'
+                              }`}
+                            >
+                              {val}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Game Controls */}
+                      <div className="flex space-x-2 pt-1">
                         <button 
-                          key={idx}
-                          onClick={() => handleTttClick(idx)}
-                          className={`w-14 h-14 rounded-xl font-display font-extrabold text-lg flex items-center justify-center transition-all cursor-pointer ${
-                            cell === 'X' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                            cell === 'O' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
-                            'bg-[#131520] hover:bg-[#1a1d2c] border border-slate-800 text-transparent active:scale-95'
-                          }`}
+                          onClick={resetTttGame}
+                          className="bg-[#3b82f6] hover:bg-blue-500 text-white font-bold text-[10px] py-1.5 px-3 rounded-xl transition-all cursor-pointer"
                         >
-                          {cell}
+                          Play Again
                         </button>
-                      ))}
+                        <button 
+                          onClick={() => {
+                            resetTttGame();
+                            setTttScores({ x: 0, o: 0, draws: 0 });
+                          }}
+                          className="bg-[#1e233d] hover:bg-slate-700 text-slate-300 font-bold text-[10px] py-1.5 px-3 rounded-xl transition-all cursor-pointer"
+                        >
+                          Reset Scores
+                        </button>
+                      </div>
+
+                      {/* AI checkbox */}
+                      <label className="flex items-center space-x-1.5 text-[9px] text-slate-400 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          checked={tttAgainstAI} 
+                          onChange={() => setTttAgainstAI(!tttAgainstAI)}
+                          className="rounded bg-slate-800 text-blue-500"
+                        />
+                        <span>Play against AI (Computer O)</span>
+                      </label>
                     </div>
 
-                    {/* Controls */}
-                    <div className="flex space-x-2 pt-1">
-                      <button 
-                        onClick={resetTtt}
-                        className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[9px] py-1.5 px-3 rounded-lg flex items-center space-x-1 active:scale-95 transition-all cursor-pointer"
-                      >
-                        <RotateCcw className="w-3 h-3 text-white" />
-                        <span>Play Again</span>
-                      </button>
-                      <button 
-                        onClick={() => setTttScores({ x: 0, o: 0, draws: 0 })}
-                        className="bg-[#1c2132] hover:bg-slate-800 text-slate-400 font-semibold text-[9px] py-1.5 px-3 rounded-lg active:scale-95 transition-all cursor-pointer"
-                      >
-                        Reset Scores
-                      </button>
-                    </div>
-
-                    {/* Play against AI toggle */}
-                    <label className="flex items-center space-x-1.5 cursor-pointer pt-1">
-                      <input 
-                        type="checkbox"
-                        checked={tttAgainstAI}
-                        onChange={() => setTttAgainstAI(!tttAgainstAI)}
-                        className="rounded border-slate-800 bg-[#131520] text-indigo-600 w-3 h-3 focus:ring-0"
-                      />
-                      <span className="text-[9px] text-slate-500 select-none">Play against AI (Computer O)</span>
-                    </label>
-
-                  </div>
+                  )
                 ) : (
-                  /* Live Simulator console logs */
-                  <div className="flex-1 p-3 bg-slate-950 font-mono text-[9px] text-slate-300 overflow-y-auto space-y-1.5 text-left">
-                    <p className="text-slate-500">--- Web Sandbox Logs ---</p>
-                    <p className="text-emerald-400">[info] Port 3000 mapped securely.</p>
-                    <p className="text-slate-400">[log] Starting JS environment core...</p>
-                    <p className="text-white">[output] Tic Tac Toe visual canvas loaded.</p>
-                    <p className="text-slate-400">[info] Event loop active. Frame rate: 60fps</p>
-                    <p className="text-indigo-400">[event] Click registered at grid item 4 (Move: X)</p>
-                    <p className="text-sky-400">[ai-move] Computer registered turn at grid item 0 (Move: O)</p>
-                    {tttWinner && <p className="text-amber-400 font-bold">[winner] Game terminated. Result code: {tttWinner}</p>}
+                  /* JavaScript Runtime Console */
+                  <div className="flex-1 bg-[#090b14] p-3 text-left font-mono text-[9px] text-slate-300 space-y-1 overflow-y-auto">
+                    <p className="text-slate-500">--- JavaScript Runtime Console ---</p>
+                    <p className="text-emerald-400">[info] DOM parsed in 38ms.</p>
+                    <p className="text-slate-300">[log] Tic Tac Toe Engine Loaded Successfully</p>
+                    <p className="text-blue-400">[event] Touch listeners attached to 9 grid cells.</p>
+                    <p className="text-slate-400">[status] Android WebView initialized on viewport 390x844.</p>
+                    {tttWinner && <p className="text-amber-400 font-bold">[game] Match state updated: Winner is {tttWinner}</p>}
                   </div>
                 )}
 
               </motion.div>
             )}
+
           </AnimatePresence>
 
-          {/* Core App Navigation Bottom Bar (Material Design 3 style) */}
+          {/* ========================================================= */}
+          {/* BOTTOM NAVIGATION BAR (5 Navigation Tabs)                  */}
+          {/* ========================================================= */}
           {activeView === 'tabs' && (
-            <div className="absolute bottom-0 left-0 right-0 bg-[#0c0d12] border-t border-slate-900/60 py-2 px-3 flex justify-around items-center z-40 shrink-0 select-none">
+            <div className="absolute bottom-0 left-0 right-0 bg-[#0c0e18] border-t border-slate-800/80 py-2 px-1 flex justify-around items-center z-40 shrink-0 select-none">
               {[
                 { id: 'home', label: 'Home', icon: HomeIcon },
-                { id: 'code', label: 'Code', icon: Code2 },
-                { id: 'templates', label: 'Templates', icon: Sparkles },
-                { id: 'files', label: 'Files', icon: FolderOpen },
+                { id: 'code', label: 'Code', icon: Edit3 },
+                { id: 'templates', label: 'Templates', icon: Wrench },
+                { id: 'files', label: 'Files', icon: List },
                 { id: 'settings', label: 'Settings', icon: SettingsIcon },
               ].map((tab, idx) => {
                 const IconComp = tab.icon;
@@ -1243,20 +1818,19 @@ export default function DeviceMockup() {
                   <button 
                     key={idx}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className="flex flex-col items-center space-y-1 relative cursor-pointer group"
+                    className="flex flex-col items-center space-y-1 relative cursor-pointer group px-2"
                   >
-                    {/* Active highlight background indicator pill */}
                     <div className="relative">
                       {isSelected && (
                         <motion.div 
                           layoutId="activeTabPill"
-                          className="absolute inset-0 bg-[#2b2d42] rounded-full -mx-3 -my-0.5 z-0"
+                          className="absolute inset-0 bg-[#1e2544] rounded-full -mx-3 -my-1 z-0"
                           transition={{ type: "spring", stiffness: 350, damping: 25 }}
                         />
                       )}
-                      <IconComp className={`w-4 h-4 relative z-10 transition-colors ${isSelected ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                      <IconComp className={`w-4 h-4 relative z-10 transition-colors ${isSelected ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
                     </div>
-                    <span className={`text-[9px] relative z-10 font-bold tracking-tight ${isSelected ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'}`}>
+                    <span className={`text-[9px] relative z-10 font-bold tracking-tight ${isSelected ? 'text-blue-400' : 'text-slate-500 group-hover:text-slate-300'}`}>
                       {tab.label}
                     </span>
                   </button>
@@ -1268,10 +1842,10 @@ export default function DeviceMockup() {
         </div>
       </div>
 
-      {/* Floating hints explaining interaction around the mockup */}
-      <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 whitespace-nowrap bg-indigo-950/80 backdrop-blur-md text-[10px] text-indigo-300 font-semibold py-1.5 px-4 rounded-full border border-indigo-500/20 shadow-xl flex items-center space-x-1.5 animate-pulse select-none">
+      {/* Floating hint pill */}
+      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-950/90 backdrop-blur-md text-[10px] text-blue-300 font-semibold py-1.5 px-4 rounded-full border border-blue-500/20 shadow-xl flex items-center space-x-1.5 animate-pulse select-none">
         <Smartphone className="w-3.5 h-3.5" />
-        <span>Click tabs and run code to test the app!</span>
+        <span>Interact with all 5 Android tabs, Code Editor & Web Preview</span>
       </div>
     </div>
   );
