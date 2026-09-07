@@ -1215,7 +1215,7 @@ export default function HomeSection({ onPageChange }: HomeSectionProps) {
           
           <div className="w-16 h-16 rounded-2xl shadow-xl shadow-blue-950/40 mx-auto overflow-hidden bg-[#131520] border border-blue-500/20 flex items-center justify-center">
             <img 
-              src="/logo.png" 
+              src="/runcoder-official-logo.png" 
               alt="RunCoder App Icon" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"

@@ -493,7 +493,7 @@ export default function DeviceMockup() {
 
   // Terminal & Compilation Logs
   const [consoleLogs, setConsoleLogs] = useState<string[]>([
-    '✔ RunCode Mobile Sandbox Online',
+    '✔ RunCoder Mobile Sandbox Online',
     '⚡ Memory: 512MB isolated container',
     '💡 Tap "▶ Run" or "🌐 Preview" to execute.'
   ]);
@@ -763,9 +763,17 @@ export default function DeviceMockup() {
                 {/* ------------------------------------------------------- */}
                 {activeTab === 'home' && (
                   <div className="p-4 space-y-4">
-                    {/* Top App Header with "RunCode" and "★ Go Pro" pill */}
+                    {/* Top App Header with "RunCoder" and "★ Go Pro" pill */}
                     <div className="flex justify-between items-center pt-0.5">
-                      <span className="text-xl font-bold text-white tracking-tight">RunCode</span>
+                      <div className="flex items-center space-x-2">
+                        <img 
+                          src="/runcoder-official-logo.png" 
+                          alt="RunCoder" 
+                          className="w-6 h-6 rounded-md object-cover select-none shadow-sm"
+                          referrerPolicy="no-referrer"
+                        />
+                        <span className="text-xl font-bold text-white tracking-tight">RunCoder</span>
+                      </div>
                       <button 
                         onClick={() => setActiveTab('settings')}
                         className="flex items-center space-x-1 bg-gradient-to-r from-[#6366f1] to-[#3b82f6] text-white text-[11px] font-bold py-1.5 px-3 rounded-full shadow-md active:scale-95 transition-all cursor-pointer"
@@ -922,7 +930,7 @@ export default function DeviceMockup() {
                           const newF: MobileFile = {
                             name: `script_${Date.now().toString().slice(-4)}.js`,
                             language: 'javascript',
-                            content: `// New Javascript File\nconsole.log("Hello from RunCode!");`,
+                            content: `// New Javascript File\nconsole.log("Hello from RunCoder!");`,
                             recentlyOpened: true,
                             timeOpened: 'Just now'
                           };
@@ -1265,7 +1273,7 @@ export default function DeviceMockup() {
                         <div className="flex items-center space-x-2.5">
                           <Star className="w-4 h-4 text-amber-400 shrink-0" />
                           <div>
-                            <h3 className="text-xs font-bold text-white">RunCode Pro</h3>
+                            <h3 className="text-xs font-bold text-white">RunCoder Pro</h3>
                             <p className="text-[9px] text-slate-400">Remove ads, unlock everything</p>
                           </div>
                         </div>
@@ -1446,7 +1454,7 @@ export default function DeviceMockup() {
                         const newF: MobileFile = {
                           name: `untitled_${Date.now().toString().slice(-4)}.js`,
                           language: 'javascript',
-                          content: `// New script\nconsole.log("RunCode v2.0");`,
+                          content: `// New script\nconsole.log("RunCoder v2.0");`,
                           recentlyOpened: true,
                           timeOpened: 'Just now'
                         };

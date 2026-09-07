@@ -26,7 +26,7 @@ export default function Footer({ onPageChange }: FooterProps) {
             >
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-[#131520] border border-blue-500/20 shadow-md group-hover:scale-105 transition-all flex items-center justify-center">
                 <img 
-                  src="/logo.png" 
+                  src="/runcoder-official-logo.png" 
                   alt="RunCoder" 
                   className="w-full h-full object-cover select-none"
                   referrerPolicy="no-referrer"

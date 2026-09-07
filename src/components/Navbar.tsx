@@ -40,7 +40,7 @@ export default function Navbar({ activePage, onPageChange }: NavbarProps) {
             <div className="w-9 h-9 rounded-xl overflow-hidden shadow-md shadow-blue-950/40 bg-[#131520] border border-blue-500/20 flex items-center justify-center group-hover:border-blue-500/40 transition-all">
               {!logoFailed ? (
                 <img 
-                  src="/logo.png" 
+                  src="/runcoder-official-logo.png" 
                   alt="RunCoder" 
                   className="w-full h-full object-cover select-none"
                   referrerPolicy="no-referrer"

@@ -43,7 +43,7 @@ export const TEMPLATE_TIERS: { id: 'All' | TemplateTier; label: string }[] = [
  * Official RunCoder 28-Template Representative Catalog
  * 4 representative templates per supported language / category:
  * C, C++, Java, Python, HTML, CSS, JavaScript
- * Source of Truth: RunCode Template Index
+ * Source of Truth: RunCoder Template Index
  */
 export const RUNCODER_TEMPLATES: RunCoderTemplate[] = [
   // ==========================================
