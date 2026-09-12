@@ -51,6 +51,25 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  // Ensure document.title is always prefixed with RunCoder for Google Search and tab titles
+  useEffect(() => {
+    const pageTitles: Record<Page, string> = {
+      home: 'RunCoder — A Complete Coding Workspace for Android',
+      features: 'Features — RunCoder',
+      pro: 'RunCoder Pro — Premium Mobile Workspace',
+      download: 'Download RunCoder for Android — Google Play',
+      support: 'Support & Help Center — RunCoder',
+      contact: 'Contact Us — RunCoder',
+      privacy: 'Privacy Policy — RunCoder',
+      terms: 'Terms of Service — RunCoder',
+      verifier: 'Publisher Verification — RunCoder',
+      security: 'Security & Vulnerability Disclosure — RunCoder',
+      refund: 'Refund Policy — RunCoder',
+      deletion: 'Account & Data Deletion — RunCoder',
+    };
+    document.title = pageTitles[activePage] || 'RunCoder — A Complete Coding Workspace for Android';
+  }, [activePage]);
+
   const renderActiveSection = () => {
     switch (activePage) {
       case 'home':

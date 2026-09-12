@@ -5,7 +5,7 @@ export default function VerifierSection() {
   const metaItems = [
     { label: 'Official Product Name', value: 'RunCoder', badge: 'Verified Android App' },
     { label: 'Developer & Publisher', value: 'Harshal Studios', desc: 'Official Android Developer Account' },
-    { label: 'Package Identifier', value: 'com.runcode.app', code: true },
+    { label: 'Package Identifier', value: 'com.runcode.app', desc: 'Official RunCoder Android App ID', code: true },
     { label: 'Official Domain', value: 'runcoder.app', desc: 'Canonical Web Endpoint' },
     { label: 'Official Support Email', value: 'runcodersupport@gmail.com', copyable: true },
     { label: 'AdMob Publisher Account ID', value: 'pub-6043930204860539', code: true },

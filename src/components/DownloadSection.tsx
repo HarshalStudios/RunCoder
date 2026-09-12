@@ -121,10 +121,11 @@ export default function DownloadSection({ onPageChange }: DownloadSectionProps) 
 
           {/* Technical Package Bar */}
           <div className="text-[11px] text-slate-500 font-mono flex items-center space-x-2">
-            <span className="uppercase tracking-wider">APPLICATION ID:</span>
+            <span className="uppercase tracking-wider">PACKAGE ID:</span>
             <code className="text-slate-300 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded text-[11px] select-text font-mono">
               com.runcode.app
             </code>
+            <span className="text-[10px] text-slate-400 font-sans">(Official RunCoder Package)</span>
           </div>
         </div>
       </section>
