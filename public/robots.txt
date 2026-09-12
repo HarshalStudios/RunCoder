@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://runcoder.app/sitemap.xml
+Sitemap: https://runcoder.pages.dev/sitemap.xml
