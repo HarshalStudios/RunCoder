@@ -169,7 +169,8 @@ export default function BlogArticle({
   };
 
   const handleShareLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+    const shareUrl = post ? `https://runcoder.pages.dev/blog/${post.slug}/` : window.location.href;
+    navigator.clipboard.writeText(shareUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
@@ -327,7 +328,13 @@ export default function BlogArticle({
                       className="text-xl sm:text-2xl font-bold text-white font-display pt-6 pb-2 border-b border-slate-800/80 scroll-mt-24 group flex items-center justify-between"
                     >
                       <span>{block.text}</span>
-                      <a href={`#${block.id}`} className="text-slate-600 group-hover:text-blue-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+                      <a 
+                        href={`/blog/${post.slug}/#${block.id}`} 
+                        className="text-slate-600 group-hover:text-blue-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label={`Link to ${block.text}`}
+                      >
+                        #
+                      </a>
                     </h2>
                   );
                 }
@@ -338,7 +345,13 @@ export default function BlogArticle({
                     className="text-lg sm:text-xl font-bold text-slate-100 font-display pt-4 scroll-mt-24 group flex items-center justify-between"
                   >
                     <span>{block.text}</span>
-                    <a href={`#${block.id}`} className="text-slate-600 group-hover:text-blue-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity">#</a>
+                    <a 
+                      href={`/blog/${post.slug}/#${block.id}`} 
+                      className="text-slate-600 group-hover:text-blue-400 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+                      aria-label={`Link to ${block.text}`}
+                    >
+                      #
+                    </a>
                   </h3>
                 );
               }
@@ -497,6 +510,17 @@ export default function BlogArticle({
                     key={idx} 
                     className="text-sm sm:text-base text-slate-300 leading-relaxed"
                     dangerouslySetInnerHTML={{ __html: block.html }}
+                    onClick={(e) => {
+                      const target = (e.target as HTMLElement).closest('a');
+                      if (target && target.getAttribute('href')?.startsWith('/blog/')) {
+                        const href = target.getAttribute('href')!;
+                        const match = href.match(/^\/blog\/([^/#?]+)/);
+                        if (match && match[1]) {
+                          e.preventDefault();
+                          onNavigateToArticle(match[1]);
+                        }
+                      }
+                    }}
                   />
                 );
               }
@@ -558,7 +582,7 @@ export default function BlogArticle({
             </h3>
             
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              RunCoder gives you a full workspace with multi-file project support, instant execution, C/C++/Java/Python/Web templates, and offline editing directly on your phone.
+              RunCoder provides a mobile-friendly workspace with multi-file project support, templates, and C/C++/Java/Python/web coding tools. Code execution requires an active internet connection.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row gap-3">
@@ -609,9 +633,13 @@ export default function BlogArticle({
                 {post.tableOfContents.map((item) => {
                   const isActive = activeTocId === item.id;
                   return (
-                    <button
+                    <a
                       key={item.id}
-                      onClick={() => scrollToSection(item.id)}
+                      href={`/blog/${post.slug}/#${item.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(item.id);
+                      }}
                       className={`w-full text-left text-xs transition-colors cursor-pointer block py-1 truncate ${
                         item.level === 3 ? 'pl-3 text-[11px]' : ''
                       } ${
@@ -622,7 +650,7 @@ export default function BlogArticle({
                       title={item.title}
                     >
                       {item.title}
-                    </button>
+                    </a>
                   );
                 })}
               </nav>
@@ -636,7 +664,7 @@ export default function BlogArticle({
               <span>Get the App</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              No laptop needed. Write code, test algorithms, and practice engineering practicals on your phone.
+              Practice C++, test algorithms, and work through programming exercises directly from your Android device.
             </p>
             <a
               href={PLAY_STORE_URL}

@@ -215,6 +215,252 @@ export default defineConfig(() => {
               .replace('</head>', article2Schema);
 
             fs.writeFileSync(path.resolve(article2Dir, 'index.html'), article2Html);
+
+            // Generate dist/blog/how-to-run-python-on-android/index.html with article-specific meta tags
+            const article3Dir = path.resolve(blogDir, 'how-to-run-python-on-android');
+            if (!fs.existsSync(article3Dir)) {
+              fs.mkdirSync(article3Dir, { recursive: true });
+            }
+
+            const article3Title = 'How to Run Python on Android: A Practical Guide (2026) — RunCoder';
+            const article3Desc = 'Learn how to run Python on Android using offline IDEs like Pydroid 3, Termux, or mobile coding environments. Compare the options and choose the right workflow.';
+            const article3Canonical = 'https://runcoder.pages.dev/blog/how-to-run-python-on-android/';
+
+            const article3Schema = `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "${article3Canonical}#article",
+          "headline": "How to Run Python on Android: A Practical Guide",
+          "description": "${article3Desc}",
+          "image": ["https://runcoder.pages.dev/runcoder-official-logo.png"],
+          "datePublished": "2026-09-13",
+          "author": {
+            "@type": "Person",
+            "name": "RunCoder Engineering Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "RunCoder",
+            "url": "https://runcoder.pages.dev/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://runcoder.pages.dev/runcoder-official-logo.png"
+            }
+          },
+          "mainEntityOfPage": "${article3Canonical}"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "${article3Canonical}#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://runcoder.pages.dev/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": "https://runcoder.pages.dev/blog/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "How to Run Python on Android: A Practical Guide",
+              "item": "${article3Canonical}"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>`;
+
+            let article3Html = html
+              .replace(/<title>.*?<\/title>/, `<title>${article3Title}</title>`)
+              .replace(/<link rel="canonical" href="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<link rel="canonical" href="${article3Canonical}" />`)
+              .replace(/<meta property="og:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="og:url" content="${article3Canonical}" />`)
+              .replace(/<meta property="twitter:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="twitter:url" content="${article3Canonical}" />`)
+              .replace(/<meta property="og:type" content="website" \/>/, '<meta property="og:type" content="article" />')
+              .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${article3Desc}" />`)
+              .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${article3Title}" />`)
+              .replace(/<meta property="twitter:title" content=".*?" \/>/, `<meta property="twitter:title" content="${article3Title}" />`)
+              .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${article3Desc}" />`)
+              .replace(/<meta property="twitter:description" content=".*?" \/>/, `<meta property="twitter:description" content="${article3Desc}" />`)
+              .replace('</head>', article3Schema);
+
+            fs.writeFileSync(path.resolve(article3Dir, 'index.html'), article3Html);
+
+            // Generate dist/blog/best-coding-apps-android/index.html with article-specific meta tags
+            const article4Dir = path.resolve(blogDir, 'best-coding-apps-android');
+            if (!fs.existsSync(article4Dir)) {
+              fs.mkdirSync(article4Dir, { recursive: true });
+            }
+
+            const article4Title = 'Best Coding Apps for Android in 2026: Which One Should You Use? — RunCoder';
+            const article4Desc = 'Compare the best coding apps for Android in 2026, including RunCoder, Termux, Pydroid 3, Acode, Spck, and cloud IDEs. Find the right app for your language and workflow.';
+            const article4Canonical = 'https://runcoder.pages.dev/blog/best-coding-apps-android/';
+
+            const article4Schema = `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "${article4Canonical}#article",
+          "headline": "Best Coding Apps for Android in 2026: Which One Should You Use?",
+          "description": "${article4Desc}",
+          "image": ["https://runcoder.pages.dev/runcoder-official-logo.png"],
+          "datePublished": "2026-09-13",
+          "author": {
+            "@type": "Person",
+            "name": "RunCoder Engineering Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "RunCoder",
+            "url": "https://runcoder.pages.dev/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://runcoder.pages.dev/runcoder-official-logo.png"
+            }
+          },
+          "mainEntityOfPage": "${article4Canonical}"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "${article4Canonical}#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://runcoder.pages.dev/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": "https://runcoder.pages.dev/blog/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Best Coding Apps for Android in 2026: Which One Should You Use?",
+              "item": "${article4Canonical}"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>`;
+
+            let article4Html = html
+              .replace(/<title>.*?<\/title>/, `<title>${article4Title}</title>`)
+              .replace(/<link rel="canonical" href="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<link rel="canonical" href="${article4Canonical}" />`)
+              .replace(/<meta property="og:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="og:url" content="${article4Canonical}" />`)
+              .replace(/<meta property="twitter:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="twitter:url" content="${article4Canonical}" />`)
+              .replace(/<meta property="og:type" content="website" \/>/, '<meta property="og:type" content="article" />')
+              .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${article4Desc}" />`)
+              .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${article4Title}" />`)
+              .replace(/<meta property="twitter:title" content=".*?" \/>/, `<meta property="twitter:title" content="${article4Title}" />`)
+              .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${article4Desc}" />`)
+              .replace(/<meta property="twitter:description" content=".*?" \/>/, `<meta property="twitter:description" content="${article4Desc}" />`)
+              .replace('</head>', article4Schema);
+
+            fs.writeFileSync(path.resolve(article4Dir, 'index.html'), article4Html);
+          }
+
+          // Generate static prerendered HTML for Article #5 (/blog/dsa-practice-on-phone/)
+          const article5Dir = path.resolve(__dirname, 'dist/blog/dsa-practice-on-phone');
+          if (!fs.existsSync(article5Dir)) {
+            fs.mkdirSync(article5Dir, { recursive: true });
+          }
+
+          if (fs.existsSync(indexHtmlPath)) {
+            const html = fs.readFileSync(indexHtmlPath, 'utf-8');
+            const article5Title = "How to Practice DSA on Your Phone: A Practical Guide for Android — RunCoder";
+            const article5Desc = "Learn how to practice Data Structures and Algorithms on Android, choose the right coding setup, solve problems effectively, and build a practical DSA workflow without a laptop.";
+            const article5Canonical = "https://runcoder.pages.dev/blog/dsa-practice-on-phone/";
+
+            const article5Schema = `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "${article5Canonical}#article",
+          "headline": "How to Practice DSA on Your Phone: A Practical Guide for Android",
+          "description": "${article5Desc}",
+          "image": ["https://runcoder.pages.dev/runcoder-official-logo.png"],
+          "datePublished": "2026-09-13",
+          "author": {
+            "@type": "Person",
+            "name": "RunCoder Engineering Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "RunCoder",
+            "url": "https://runcoder.pages.dev/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://runcoder.pages.dev/runcoder-official-logo.png"
+            }
+          },
+          "mainEntityOfPage": "${article5Canonical}"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "${article5Canonical}#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://runcoder.pages.dev/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": "https://runcoder.pages.dev/blog/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "How to Practice DSA on Your Phone: A Practical Guide for Android",
+              "item": "${article5Canonical}"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>`;
+
+            let article5Html = html
+              .replace(/<title>.*?<\/title>/, `<title>${article5Title}</title>`)
+              .replace(/<link rel="canonical" href="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<link rel="canonical" href="${article5Canonical}" />`)
+              .replace(/<meta property="og:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="og:url" content="${article5Canonical}" />`)
+              .replace(/<meta property="twitter:url" content="https:\/\/runcoder\.pages\.dev\/".*?\/>/, `<meta property="twitter:url" content="${article5Canonical}" />`)
+              .replace(/<meta property="og:type" content="website" \/>/, '<meta property="og:type" content="article" />')
+              .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${article5Desc}" />`)
+              .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${article5Title}" />`)
+              .replace(/<meta property="twitter:title" content=".*?" \/>/, `<meta property="twitter:title" content="${article5Title}" />`)
+              .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${article5Desc}" />`)
+              .replace(/<meta property="twitter:description" content=".*?" \/>/, `<meta property="twitter:description" content="${article5Desc}" />`)
+              .replace('</head>', article5Schema);
+
+            fs.writeFileSync(path.resolve(article5Dir, 'index.html'), article5Html);
           }
         }
       }
