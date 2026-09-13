@@ -10,6 +10,8 @@ RunCoder is a modern Android code editor and mobile IDE designed for students, p
 
 ## Primary Pages
 - **Home**: Main dashboard, product overview, core benefits, FAQ, and download call-to-actions.
+- **Blog**: Official tutorials, programming guides, and comparisons at https://runcoder.pages.dev/blog/
+- **Guide**: How to Code on Android (Pillar Guide) at https://runcoder.pages.dev/blog/how-to-code-on-android/
 - **Features**: Breakdown of editor capabilities, syntax highlighting, templates, and execution details.
 - **RunCoder Pro**: Subscription details (Monthly, Yearly, Lifetime tiers available) integrated securely with Google Play Billing.
 - **Download**: Installation guidelines, system requirements, permissions overview.
@@ -19,7 +21,7 @@ RunCoder is a modern Android code editor and mobile IDE designed for students, p
 - **Contact**: Direct contact information and developer message submission.
 
 ## Official App Information
-- **Domain**: https://runcoder.app
+- **Domain**: https://runcoder.pages.dev
 - **Platform**: Android (Google Play Store)
 - **Publisher Account ID**: pub-6043930204860539
 - **Official Support Email**: runcodersupport@gmail.com

@@ -6,6 +6,7 @@ export type Page =
   | 'pro' 
   | 'download' 
   | 'support' 
+  | 'blog'
   | 'privacy' 
   | 'terms' 
   | 'contact'

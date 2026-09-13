@@ -13,46 +13,103 @@ import VerifierSection from './components/VerifierSection';
 import SecuritySection from './components/SecuritySection';
 import RefundSection from './components/RefundSection';
 import DeletionSection from './components/DeletionSection';
+import BlogIndex from './components/blog/BlogIndex';
+import BlogArticle from './components/blog/BlogArticle';
 import { Page } from './types';
 
 export default function App() {
   const [activePage, setActivePage] = useState<Page>('home');
+  const [currentArticleSlug, setCurrentArticleSlug] = useState<string | null>(null);
 
-  // Handle page transitions with scroll to top
+  // Helper to parse current path and hash
+  const parseLocation = (): { page: Page; slug: string | null } => {
+    const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+    
+    if (pathname === '/blog') {
+      return { page: 'blog', slug: null };
+    }
+    if (pathname.startsWith('/blog/')) {
+      const slug = pathname.replace('/blog/', '').replace(/\/+$/, '');
+      return { page: 'blog', slug: slug || null };
+    }
+
+    // Check hash for SPA product sections
+    const hash = window.location.hash.replace('#', '') as Page;
+    const validPages: Page[] = [
+      'home', 'features', 'pro', 'download', 'support', 
+      'contact', 'privacy', 'terms', 'verifier', 'security', 
+      'refund', 'deletion', 'blog'
+    ];
+    if (validPages.includes(hash) && hash !== 'home') {
+      return { page: hash, slug: null };
+    }
+
+    return { page: 'home', slug: null };
+  };
+
+  // Handle page transitions
   const handlePageChange = (page: Page) => {
     setActivePage(page);
+    setCurrentArticleSlug(null);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    // Update window hash for bookmarking / browser back navigation support
-    if (page === 'home') {
-      history.replaceState(null, '', window.location.pathname);
+
+    if (page === 'blog') {
+      history.pushState(null, '', '/blog/');
+    } else if (page === 'home') {
+      history.pushState(null, '', '/');
     } else {
-      window.location.hash = page;
+      if (window.location.pathname.startsWith('/blog')) {
+        history.pushState(null, '', `/#${page}`);
+      } else {
+        window.location.hash = page;
+      }
     }
   };
 
-  // Synchronize hash with page state on mount/change
+  const handleNavigateToArticle = (slug: string) => {
+    setActivePage('blog');
+    setCurrentArticleSlug(slug);
+    history.pushState(null, '', `/blog/${slug}/`);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
+  const handleNavigateToBlog = () => {
+    setActivePage('blog');
+    setCurrentArticleSlug(null);
+    history.pushState(null, '', '/blog/');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
+  // Synchronize location (popstate & hashchange) on mount / browser navigation
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '') as Page;
-      const validPages: Page[] = ['home', 'features', 'pro', 'download', 'support', 'contact', 'privacy', 'terms', 'verifier', 'security', 'refund', 'deletion'];
-      if (validPages.includes(hash) && hash !== 'home') {
-        setActivePage(hash);
-      } else {
-        setActivePage('home');
-        // Ensure we always land at the top hero on home load
+    const syncFromLocation = () => {
+      const { page, slug } = parseLocation();
+      setActivePage(page);
+      setCurrentArticleSlug(slug);
+      if (page === 'home' && !window.location.hash) {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }
     };
 
-    // Trigger on mount
-    handleHashChange();
+    syncFromLocation();
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', syncFromLocation);
+    window.addEventListener('hashchange', syncFromLocation);
+    return () => {
+      window.removeEventListener('popstate', syncFromLocation);
+      window.removeEventListener('hashchange', syncFromLocation);
+    };
   }, []);
 
   // Ensure document.title is always prefixed with RunCoder for Google Search and tab titles
   useEffect(() => {
+    if (activePage === 'blog') {
+      if (!currentArticleSlug) {
+        document.title = 'RunCoder Blog — Guides & Tutorials for Coding on Android';
+      }
+      return;
+    }
+
     const pageTitles: Record<Page, string> = {
       home: 'RunCoder — A Complete Coding Workspace for Android',
       features: 'Features — RunCoder',
@@ -66,11 +123,31 @@ export default function App() {
       security: 'Security & Vulnerability Disclosure — RunCoder',
       refund: 'Refund Policy — RunCoder',
       deletion: 'Account & Data Deletion — RunCoder',
+      blog: 'RunCoder Blog — Guides & Tutorials for Coding on Android',
     };
     document.title = pageTitles[activePage] || 'RunCoder — A Complete Coding Workspace for Android';
-  }, [activePage]);
+  }, [activePage, currentArticleSlug]);
 
   const renderActiveSection = () => {
+    if (activePage === 'blog') {
+      if (currentArticleSlug) {
+        return (
+          <BlogArticle 
+            slug={currentArticleSlug}
+            onNavigateBack={handleNavigateToBlog}
+            onNavigateToArticle={handleNavigateToArticle}
+            onNavigateHome={() => handlePageChange('home')}
+          />
+        );
+      }
+      return (
+        <BlogIndex 
+          onNavigateToArticle={handleNavigateToArticle}
+          onNavigateHome={() => handlePageChange('home')}
+        />
+      );
+    }
+
     switch (activePage) {
       case 'home':
         return <HomeSection onPageChange={handlePageChange} />;

@@ -1,7 +1,7 @@
 /* TEAM */
 Developer: RunCoder Dev Team
 Contact: runcodersupport@gmail.com
-Website: https://runcoder.app
+Website: https://runcoder.pages.dev
 
 /* SITE */
 Last update: 2026/07/08

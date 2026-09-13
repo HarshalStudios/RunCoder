@@ -44,6 +44,11 @@ export default function Footer({ onPageChange }: FooterProps) {
             <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Resources</h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <button onClick={() => handlePageClick('blog')} className="text-slate-500 hover:text-white transition-colors cursor-pointer text-left">
+                  Blog & Guides
+                </button>
+              </li>
+              <li>
                 <button onClick={() => handlePageClick('support')} className="text-slate-500 hover:text-white transition-colors cursor-pointer text-left">
                   Help Center & FAQs
                 </button>
@@ -106,6 +111,7 @@ export default function Footer({ onPageChange }: FooterProps) {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-xs text-slate-500">
+            <button onClick={() => handlePageClick('blog')} className="hover:text-slate-300 transition-colors cursor-pointer">Blog</button>
             <button onClick={() => handlePageClick('privacy')} className="hover:text-slate-300 transition-colors cursor-pointer">Privacy</button>
             <button onClick={() => handlePageClick('terms')} className="hover:text-slate-300 transition-colors cursor-pointer">Terms</button>
             <a href="mailto:runcodersupport@gmail.com" className="hover:text-slate-300 transition-colors">runcodersupport@gmail.com</a>

@@ -16,6 +16,7 @@ export default function Navbar({ activePage, onPageChange }: NavbarProps) {
     { id: 'features', label: 'Features' },
     { id: 'pro', label: 'RunCoder Pro', highlight: true },
     { id: 'download', label: 'Download' },
+    { id: 'blog', label: 'Blog' },
     { id: 'support', label: 'Support' },
     { id: 'contact', label: 'Contact' },
   ];

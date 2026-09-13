@@ -375,12 +375,12 @@ Mechanical Keyboard -> Qty: 12`,
 public class WebCrawler {
     public static void main(String[] args) throws Exception {
         ExecutorService pool = Executors.newFixedThreadPool(2);
-        Future<String> task = pool.submit(() -> "Crawled: https://runcoder.app (HTTP 200)");
+        Future<String> task = pool.submit(() -> "Crawled: https://runcoder.pages.dev (HTTP 200)");
         System.out.println(task.get());
         pool.shutdown();
     }
 }`,
-    output: 'Crawled: https://runcoder.app (HTTP 200)',
+    output: 'Crawled: https://runcoder.pages.dev (HTTP 200)',
     category: 'Concurrency',
     tags: ['java', 'advanced', 'threads', 'executorservice', 'future']
   },
