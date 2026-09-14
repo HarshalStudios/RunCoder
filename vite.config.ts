@@ -385,8 +385,8 @@ export default defineConfig(() => {
             fs.mkdirSync(article5Dir, { recursive: true });
           }
 
-          if (fs.existsSync(indexHtmlPath)) {
-            const html = fs.readFileSync(indexHtmlPath, 'utf-8');
+          if (fs.existsSync(distIndex)) {
+            const html = fs.readFileSync(distIndex, 'utf-8');
             const article5Title = "How to Practice DSA on Your Phone: A Practical Guide for Android — RunCoder";
             const article5Desc = "Learn how to practice Data Structures and Algorithms on Android, choose the right coding setup, solve problems effectively, and build a practical DSA workflow without a laptop.";
             const article5Canonical = "https://runcoder.pages.dev/blog/dsa-practice-on-phone/";
