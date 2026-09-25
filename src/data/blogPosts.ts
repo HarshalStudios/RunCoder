@@ -1,11 +1,13 @@
 import { BlogPost, BlogCategory } from '../types/blog';
 import { article5DsaPracticeOnPhone } from './article5';
+import { NEW_BLOG_POSTS } from './newArticles';
 
 /**
  * RunCoder Official Blog Repository
  * Articles are structured for SEO indexing, Google Search crawlability, and rich content display.
  */
 export const BLOG_POSTS: BlogPost[] = [
+  ...NEW_BLOG_POSTS,
   {
     slug: 'how-to-code-on-android',
     title: 'How to Code on Android: A Practical Guide to Programming on Your Phone',
