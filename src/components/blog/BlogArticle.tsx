@@ -374,7 +374,7 @@ export default function BlogArticle({
                         <span className="text-slate-300 font-semibold">{block.filename || block.language}</span>
                       </div>
                       <button
-                        onClick={() => handleCopyCode(block.code, idx)}
+                        onClick={() => handleCopyCode(block.text, idx)}
                         className="flex items-center space-x-1 hover:text-white transition-colors cursor-pointer"
                       >
                         {isCopied ? (
@@ -391,7 +391,7 @@ export default function BlogArticle({
                       </button>
                     </div>
                     <pre className="p-4 overflow-x-auto text-xs sm:text-sm font-mono text-slate-200 leading-relaxed bg-[#090a0f]">
-                      <code>{block.code}</code>
+                      <code>{block.text}</code>
                     </pre>
                   </div>
                 );
